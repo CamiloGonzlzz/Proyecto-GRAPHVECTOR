@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graficar Vector</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Graficar Vector en R2</h1>
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="x">Coordenada X:</label>
+                <input type="number" name="x" id="x" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="y">Coordenada Y:</label>
+                <input type="number" name="y" id="y" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Graficar</button>
+        </form>
+
+        {% if imagen %}
+            <div class="mt-4">
+                <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico del vector" class="img-fluid">
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

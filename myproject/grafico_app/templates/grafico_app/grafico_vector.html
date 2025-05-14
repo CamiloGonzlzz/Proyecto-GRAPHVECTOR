@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vector 3D con Extrapolaciones</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        #grafico { 
+            width: 900px; 
+            height: 700px; 
+            margin: 20px auto;
+            border: 1px solid #ddd;
+        }
+        h1 { text-align: center; color: #333; }
+        form { text-align: center; margin-bottom: 20px; }
+        input { width: 60px; }
+    </style>
+</head>
+<style>
+    #grafico { 
+        width: 900px; 
+        height: 700px; 
+        margin: 20px auto;
+        border: 1px solid #ddd;
+        display: none; /* Oculto por defecto */
+    }
+    h1 { text-align: center; color: #333; }
+</style>
+<body>
+    <h1>Vector 3D con Proyecciones Extrapoladas</h1>
+    <form id="vectorForm">
+        <label>X: <input type="number" id="inputX" required></label>
+        <label>Y: <input type="number" id="inputY" required></label>
+        <label>Z: <input type="number" id="inputZ" required></label>
+        <button type="submit">Graficar</button>
+    </form>
+    <div id="grafico"></div>
+
+    <script>
+        // Función para graficar usando Plotly
+        function graficar(x, y, z) {
+            // Actualiza los valores mostrados
+            document.getElementById('coordX').textContent = 'X: ' + x;
+            document.getElementById('coordY').textContent = 'Y: ' + y;
+            document.getElementById('coordZ').textContent = 'Z: ' + z;
+
+            // Vector principal
+            const vectorPrincipal = {
+                type: 'scatter3d',
+                mode: 'lines+markers',
+                x: [0, x],
+                y: [0, y],
+                z: [0, z],
+                line: { color: 'red', width: 8 },
+                marker: { color: 'black', size: 6 },
+                name: 'Vector Principal'
+            };
+
+            // Proyecciones extrapoladas
+            const extrapolaciones = [
+                { x: [x, x], y: [y, y], z: [z, 0], line: { color: 'blue', width: 4, dash: 'dot' }, type: 'scatter3d', mode: 'lines', name: 'Proyección XY' },
+                { x: [x, x], y: [y, 0], z: [z, z], line: { color: 'green', width: 4, dash: 'dot' }, type: 'scatter3d', mode: 'lines', name: 'Proyección XZ' },
+                { x: [x, 0], y: [y, y], z: [z, z], line: { color: 'purple', width: 4, dash: 'dot' }, type: 'scatter3d', mode: 'lines', name: 'Proyección YZ' }
+            ];
+
+            // Componentes del vector
+            const componentes = [
+                { x: [0, x], y: [0, 0], z: [0, 0], line: { color: 'orange', width: 3 }, type: 'scatter3d', mode: 'lines', name: 'Componente X' },
+                { x: [0, 0], y: [0, y], z: [0, 0], line: { color: 'cyan', width: 3 }, type: 'scatter3d', mode: 'lines', name: 'Componente Y' },
+                { x: [0, 0], y: [0, 0], z: [0, z], line: { color: 'magenta', width: 3 }, type: 'scatter3d', mode: 'lines', name: 'Componente Z' }
+            ];
+
+            const layout = {
+                title: 'Descomposición del Vector 3D',
+                scene: {
+                    xaxis: { title: 'Eje X', backgroundcolor: 'rgba(0,0,0,0)' },
+                    yaxis: { title: 'Eje Y', backgroundcolor: 'rgba(0,0,0,0)' },
+                    zaxis: { title: 'Eje Z', backgroundcolor: 'rgba(0,0,0,0)' },
+                    camera: { eye: { x: 1.5, y: 1.5, z: 0.8 } }
+                },
+                margin: { l: 0, r: 0, b: 0, t: 40 }
+            };
+
+            Plotly.newPlot(
+                'grafico',
+                [vectorPrincipal, ...extrapolaciones, ...componentes],
+                layout
+            );
+        }
+
+        // Manejo del formulario
+        document.getElementById('vectorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const x = parseFloat(document.getElementById('inputX').value);
+            const y = parseFloat(document.getElementById('inputY').value);
+            const z = parseFloat(document.getElementById('inputZ').value);
+
+            // Mostrar el div del gráfico
+            document.getElementById('grafico').style.display = 'block';
+
+            graficar(x, y, z);
+        });
+
+    </script>
+</body>
+</html>

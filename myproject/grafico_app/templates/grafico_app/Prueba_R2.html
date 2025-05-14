@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graficar Vector</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .bg-dark-transparent {
+            background: rgba(33, 37, 41, 0.85);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+        label, .form-control, .badge, .alert {
+            color: #fff !important;
+        }
+        .form-control {
+            background-color: #343a40 !important;
+            border: 1px solid #495057;
+        }
+        .btn-primary, .btn-secondary {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="bg-dark-transparent">
+            <h1 class="mb-4 text-light">Graficar Vector en R2</h1>
+            {% if estado == 'inicio' %}
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="accion" value="iniciar" class="btn btn-primary">Iniciar Prueba</button>
+                </form>
+            {% endif %}
+
+            {% if estado == 'pregunta' %}
+                {% if imagen %}
+                    <div class="mt-4 text-center">
+                        <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico del vector" class="img-fluid">
+                    </div>
+                {% endif %}
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="x_val">¿Cuál es el valor de X?</label>
+                        <input type="number" class="form-control" id="x_val" name="x_val" value="{{ x_val }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="y_val">¿Cuál es el valor de Y?</label>
+                        <input type="number" class="form-control" id="y_val" name="y_val" value="{{ y_val }}" required>
+                    </div>
+                    <button type="submit" name="accion" value="responder" class="btn btn-primary">Enviar Respuesta</button>
+                </form>
+            {% endif %}
+
+            {% if estado == 'respuesta' %}
+                {% if imagen %}
+                    <div class="mt-4 text-center">
+                        <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico del vector" class="img-fluid">
+                    </div>
+                {% endif %}
+                <div class="alert alert-dark mt-4" style="background: rgba(30,30,30,0.95); color: #fff; border: 1px solid #444;">
+                    {{ mensaje }}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="accion" value="siguiente" class="btn btn-secondary">Siguiente</button>
+                </form>
+            {% endif %}
+
+
+            {% if estado != 'inicio' %}
+            <div class="mt-2">
+                <span class="badge badge-success">Correctas: {{ correctas }}</span>
+                <span class="badge badge-danger">Incorrectas: {{ incorrectas }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
