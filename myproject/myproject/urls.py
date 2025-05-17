@@ -26,5 +26,6 @@ urlpatterns = [
     path('vectores/', include('grafico_app.urls')),
     path('grafico/', include('grafico_app.urls')),
     path('pruebaR2/', include('grafico_app.urls')),
+    path('', include('grafico_app.urls'))
 
 ]
