@@ -12,6 +12,10 @@ import matplotlib.patches as patches
 def inicio(request):
     return render(request, 'grafico_app/Inicio.html')  # Asegúrate de tener este template
 
+def opciones_tareas(request):
+    return render(request, "grafico_app/Opciones_Tareas.html")
+
+
 def graficar_vectorR2(request):
     if request.method == 'POST':
         x = int(request.POST.get('x'))

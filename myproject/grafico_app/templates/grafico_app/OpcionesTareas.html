@@ -148,15 +148,20 @@
     <div id="canvas-container"></div>
     
     <div class="hero-section">
-        <h1 class="main-title">Graficos Vectores</h1>
-        <button class="cta-button" id="exploreBtn">INICIAR EXPERIENCIA</button>
+        <h1 class="main-title">Graficos Vectores</h1>  
     </div>
     
     <div class="fractal-controls">
-        <button class="control-btn" id="mandelbrotBtn">Mandelbrot</button>
-        <button class="control-btn" id="juliaBtn">Julia</button>
-        <button class="control-btn" id="sierpinskiBtn">Sierpinski</button>
-        <button class="control-btn" id="treeBtn">Árbol Fractal</button>
+        <button class="control-btn" id="mandelbrotBtn">Graficar R2</button>
+        <button class="control-btn" id="juliaBtn">Graficar R3</button>
+        <button class="control-btn" id="sierpinskiBtn">Suma R2</button>
+        <button class="control-btn" id="treeBtn">Resta R2</button>
+        <button class="control-btn" id="mandelbrotBtn">Multiplicacion R2</button>
+        <button class="control-btn" id="sierpinskiBtn">Suma R3</button>
+        <button class="control-btn" id="treeBtn">Resta R3</button>
+        <button class="control-btn" id="mandelbrotBtn">Multiplicacion R3</button>
+        <button class="control-btn" id="sierpinskiBtn">Prueba R2</button>
+        <button class="control-btn" id="treeBtn">Prueba R3</button>
     </div>
     
     <div class="fractal-info">Mueve el ratón para navegar por el espacio fractal | Rueda del ratón para zoom</div>
@@ -290,35 +295,29 @@
             }
         });
         
-    // Botón de interacción
-document.getElementById('exploreBtn').addEventListener('click', function() {
-    this.textContent = "EXPLORANDO...";
-    this.style.background = "rgba(252, 0, 255, 0.3)";
-    this.style.borderColor = "rgba(252, 0, 255, 0.8)";
-    
-    // Animación con GSAP
-    gsap.to(camera.position, {
-        z: 15,
-        duration: 2,
-        ease: "power2.inOut"
-    });
-
-    if (fractalObject) {
-        gsap.to(fractalObject.rotation, {
-            x: Math.PI * 2,
-            y: Math.PI * 2,
-            duration: 20,
-            repeat: -1,
-            ease: "none"
+        // Botón de interacción
+        document.getElementById('exploreBtn').addEventListener('click', function() {
+            this.textContent = "EXPLORANDO...";
+            this.style.background = "rgba(252, 0, 255, 0.3)";
+            this.style.borderColor = "rgba(252, 0, 255, 0.8)";
+            
+            // Animación con GSAP
+            gsap.to(camera.position, {
+                z: 15,
+                duration: 2,
+                ease: "power2.inOut"
+            });
+            
+            if (fractalObject) {
+                gsap.to(fractalObject.rotation, {
+                    x: Math.PI * 2,
+                    y: Math.PI * 2,
+                    duration: 20,
+                    repeat: -1,
+                    ease: "none"
+                });
+            }
         });
-    }
-
-    // Redirigir después de 2 segundos (cuando termina la animación de la cámara)
-    setTimeout(function() {
-        window.location.href = "opciones";
-    }, 2000);
-});
-
         
         // Controladores de fractal
         document.getElementById('mandelbrotBtn').addEventListener('click', createMandelbulb);

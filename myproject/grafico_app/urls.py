@@ -8,5 +8,6 @@ urlpatterns = [
     path('pruebaR2/', views.PruebaR2, name='Prueba_R2.html'),
     path('suma_vectoresR2/', views.suma_vectoresR2, name='suma_vectoresR2'),
     path('resta_vectoresR2/', views.resta_vectoresR2, name='resta_vectoresR2'),
-    path('multiplicacion_vectoresR2/', views.multiplicacion_vectoresR2, name='multiplicacion_vectoresR2')
+    path('multiplicacion_vectoresR2/', views.multiplicacion_vectoresR2, name='multiplicacion_vectoresR2'),
+    path('opciones/', views.opciones_tareas, name='opciones')
 ]
