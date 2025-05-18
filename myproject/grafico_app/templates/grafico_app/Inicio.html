@@ -9,12 +9,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Exo+2:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        body { 
-            margin: 0; 
-            overflow: hidden; 
-            background: #000;
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Exo 2', sans-serif;
         }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+                filter: blur(6px);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-8px) scale(1.02);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .main-title {
+            /* ...tus estilos previos... */
+            animation: fadeInUp 1.4s cubic-bezier(.23,1.01,.32,1) both;
+        }
+
+
         #canvas-container {
             position: fixed;
             top: 0;
@@ -76,9 +101,9 @@
             overflow: hidden;
         }
         .cta-button:hover {
-            background: rgba(252, 0, 255, 0.25);
+            background: rgba(0, 0, 0, 0.582);
             transform: translateY(-5px);
-            box-shadow: 0 0 50px rgba(252, 0, 255, 0.5);
+            box-shadow: 0 0 50px rgba(0, 242, 250, 0.808);
         }
         .cta-button::before {
             content: '';
@@ -148,201 +173,32 @@
     <div id="canvas-container"></div>
     
     <div class="hero-section">
-        <h1 class="main-title">Graficos Vectores</h1>
+        <h1 class="main-title">VECTOR GRAPH 2.0</h1>
         <button class="cta-button" id="exploreBtn">INICIAR EXPERIENCIA</button>
     </div>
-    
-    <div class="fractal-controls">
-        <button class="control-btn" id="mandelbrotBtn">Mandelbrot</button>
-        <button class="control-btn" id="juliaBtn">Julia</button>
-        <button class="control-btn" id="sierpinskiBtn">Sierpinski</button>
-        <button class="control-btn" id="treeBtn">Árbol Fractal</button>
-    </div>
-    
-    <div class="fractal-info">Mueve el ratón para navegar por el espacio fractal | Rueda del ratón para zoom</div>
+
     
     <script>
-        // Configuración inicial
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x000000);
-        
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 30;
-        
-        const renderer = new THREE.WebGLRenderer({ 
-            antialias: true,
-            powerPreference: "high-performance"
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.outputEncoding = THREE.sRGBEncoding;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.5;
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-        
-        // Controles de órbita
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.5;
-        controls.minDistance = 5;
-        controls.maxDistance = 100;
-        
-        // Iluminación
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
-        scene.add(ambientLight);
-        
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(1, 1, 1);
-        scene.add(directionalLight);
-        
-        const pointLight1 = new THREE.PointLight(0x00dbde, 2, 50);
-        pointLight1.position.set(5, 5, 5);
-        scene.add(pointLight1);
-        
-        const pointLight2 = new THREE.PointLight(0xfc00ff, 2, 50);
-        pointLight2.position.set(-5, -5, -5);
-        scene.add(pointLight2);
-        
-        // Objeto fractal central (Mandelbulb)
-        let fractalObject;
-        
-        function createMandelbulb() {
-            if (fractalObject) scene.remove(fractalObject);
-            
-            const geometry = new THREE.SphereGeometry(10, 128, 128);
-            const material = new THREE.MeshPhongMaterial({
-                color: 0x00dbde,
-                emissive: 0x0066cc,
-                emissiveIntensity: 0.5,
-                specular: 0xffffff,
-                shininess: 50,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.9,
-                side: THREE.DoubleSide
-            });
-            
-            fractalObject = new THREE.Mesh(geometry, material);
-            
-            // Aplicar deformación fractal
-            const position = geometry.attributes.position;
-            const originalPositions = position.array.slice();
-            
-            for (let i = 0; i < position.count; i++) {
-                const x = originalPositions[i * 3];
-                const y = originalPositions[i * 3 + 1];
-                const z = originalPositions[i * 3 + 2];
-                
-                // Algoritmo simplificado de Mandelbulb
-                const iter = 8;
-                const power = 8;
-                let r = Math.sqrt(x*x + y*y + z*z);
-                let theta = Math.atan2(Math.sqrt(x*x + y*y), z) * power;
-                let phi = Math.atan2(y, x) * power;
-                
-                const scale = 0.5;
-                position.array[i * 3] = scale * Math.sin(theta) * Math.cos(phi) * r;
-                position.array[i * 3 + 1] = scale * Math.sin(theta) * Math.sin(phi) * r;
-                position.array[i * 3 + 2] = scale * Math.cos(theta) * r;
-            }
-            
-            position.needsUpdate = true;
-            scene.add(fractalObject);
-        }
-        
-        // Textos matemáticos flotantes
-        const formulas = [
-            "z_{n+1} = z_n^2 + c",
-            "f(z) = z^2 + c",
-            "S = { c ∈ ℂ | lim_{n→∞} z_n ≠ ∞ }",
-            "D = log(log|z_n|)/2^n",
-            "M = { c ∈ ℂ | J_c es conexo }"
-        ];
-        
-        formulas.forEach((formula, index) => {
-            const div = document.createElement('div');
-            div.className = 'math-formula';
-            div.textContent = formula;
-            div.style.left = `${10 + Math.random() * 80}%`;
-            div.style.animationDelay = `${index * 3}s`;
-            document.body.appendChild(div);
-        });
+        const menuUrl = "{% url 'menu' %}";
         
         // Interacción con el mouse
         const mouse = new THREE.Vector2();
         
-        document.addEventListener('mousemove', (event) => {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-            
-            // Efecto de luz interactiva
-            pointLight1.position.x = mouse.x * 20;
-            pointLight1.position.y = mouse.y * 20;
-            
-            pointLight2.position.x = -mouse.x * 15;
-            pointLight2.position.y = -mouse.y * 15;
-            
-            if (fractalObject) {
-                fractalObject.rotation.x = mouse.y * 0.5;
-                fractalObject.rotation.y = mouse.x * 0.5;
-            }
-        });
-        
+       
     // Botón de interacción
-document.getElementById('exploreBtn').addEventListener('click', function() {
-    this.textContent = "EXPLORANDO...";
-    this.style.background = "rgba(252, 0, 255, 0.3)";
-    this.style.borderColor = "rgba(252, 0, 255, 0.8)";
-    
-    // Animación con GSAP
-    gsap.to(camera.position, {
-        z: 15,
-        duration: 2,
-        ease: "power2.inOut"
+    document.getElementById('exploreBtn').addEventListener('click', function() {
+        this.textContent = "EXPLORANDO...";
+        this.style.background = "rgba(0, 0, 0, 0.582";
+        this.style.borderColor = "rgba(85, 0, 222, 0.5)";
+        
+
+        // Redirigir después de 2 segundos (cuando termina la animación de la cámara)
+        setTimeout(function() {
+            window.location.href = menuUrl;
+        }, 2000);
+
     });
 
-    if (fractalObject) {
-        gsap.to(fractalObject.rotation, {
-            x: Math.PI * 2,
-            y: Math.PI * 2,
-            duration: 20,
-            repeat: -1,
-            ease: "none"
-        });
-    }
-
-    // Redirigir después de 2 segundos (cuando termina la animación de la cámara)
-    setTimeout(function() {
-        window.location.href = "opciones";
-    }, 2000);
-});
-
-        
-        // Controladores de fractal
-        document.getElementById('mandelbrotBtn').addEventListener('click', createMandelbulb);
-        document.getElementById('juliaBtn').addEventListener('click', function() {
-            // Implementar conjunto de Julia
-        });
-        
-        // Ajuste de ventana
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        
-        // Animación
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        
-        // Inicialización
-        createMandelbulb();
-        animate();
     </script>
 </body>
 </html>

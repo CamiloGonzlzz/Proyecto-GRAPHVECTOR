@@ -1,0 +1,234 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VECTOR GRAPH 2.0</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Exo+2:wght@300;600&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Exo 2', sans-serif;
+}
+/* Contenedor principal centrado en columna */
+.centered-container {
+    position: absolute;
+    top: 7vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    z-index: 100;
+}
+/* Título centrado y grande */
+.nav-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    letter-spacing: 3px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00dbde, #fc00ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(0, 219, 222, 0.6);
+    text-align: center;
+    margin-bottom: 2.5rem;
+    width: 100vw;
+    animation: fadeInUp 1.4s cubic-bezier(.23,1.01,.32,1) both;
+}
+/* Menú centrado debajo del título */
+.bottom-menu-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    backdrop-filter: blur(15px);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 30px;
+    box-shadow: 0 8px 40px rgba(0,219,222,0.08);
+    border: 1px solid rgba(0, 219, 222, 0.2);
+    padding: 1rem 2.5rem;
+    gap: 3rem;
+    animation: fadeInUp 1.2s cubic-bezier(.23,1.01,.32,1) both;
+}
+.menu-category {
+    position: relative;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    border-radius: 20px;
+    transition: color 0.3s, background 0.3s;
+    background: rgba(0,0,0,0.09);
+}
+.menu-category:hover, .menu-category.active {
+    color: #00dbde;
+    background: rgba(0,219,222,0.10);
+}
+.submenu {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.97);
+    border: 1px solid rgba(0, 219, 222, 0.3);
+    border-radius: 14px;
+    box-shadow: 0 8px 40px rgba(0,219,222,0.12);
+    min-width: 230px;
+    padding: 1.2rem 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: all 0.35s cubic-bezier(.23,1.01,.32,1);
+    z-index: 1200;
+}
+.menu-category.active .submenu {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transform: translateX(-50%) translateY(12px);
+}
+.submenu-item {
+    width: 100%;
+    margin: 0.4rem 0;
+    padding: 1.1rem 0.5rem;
+    border-radius: 8px;
+    font-size: 1.25rem;
+    color: rgba(255,255,255,0.93);
+    background: rgba(0, 0, 0, 0.97);
+    border: none;
+    outline: none;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.97);
+    transition: all 0.25s cubic-bezier(.23,1.01,.32,1);
+    text-align: center;
+}
+.submenu-item:hover {
+    background: rgba(0, 0, 0, 0.97);
+    color: #fff;
+    transform: scale(1.04);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.97);
+}
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(60px) scale(0.95);
+        filter: blur(6px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-8px) scale(1.02);
+        filter: blur(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+@media (max-width: 700px) {
+    .nav-title {
+        font-size: 2rem;
+        margin-bottom: 1.2rem;
+    }
+    .bottom-menu-container {
+        padding: 0.5rem 0.5rem;
+        gap: 1rem;
+    }
+    .menu-category {
+        font-size: 1.1rem;
+        padding: 0.7rem 1rem;
+    }
+    .submenu {
+        min-width: 120px;
+        padding: 0.6rem 0.5rem;
+    }
+    .submenu-item {
+        font-size: 1rem;
+        padding: 0.7rem 0.2rem;
+    }
+}
+</style>
+</head>
+<body>
+<div id="canvas-container"></div>
+<div class="centered-container">
+    <div class="nav-title">VECTOR GRAPH 2.0</div>
+    <div class="bottom-menu-container">
+        <div class="menu-category">
+            2 DIMENSIONES
+            <div class="submenu">
+                <a href="{% url 'vectorR2' %}"><button class="submenu-item">Grafica R2</button></a>
+                <a href="{% url 'suma_vectoresR2' %}"><button class="submenu-item">Suma</button></a>
+                <a href="{% url 'resta_vectoresR2' %}"><button class="submenu-item">Resta</button></a>
+                <a href="{% url 'multiplicacion_vectoresR2' %}"><button class="submenu-item">Multiplicación</button></a>   
+                <a href="{% url 'Prueba_R2' %}"><button class="submenu-item">Prueba</button></a>  
+            </div>
+
+        </div>
+        <div class="menu-category">
+            3 DIMENSIONES
+            <div class="submenu">
+                <button class="submenu-item">Grafica R2</button>
+                <button class="submenu-item">Suma</button>
+                <button class="submenu-item">Resta</button>
+                <button class="submenu-item">Multiplicación</button>
+                <button class="submenu-item">Prueba</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.querySelectorAll('.menu-category').forEach(category => {
+    category.addEventListener('click', function(e) {
+        if(e.target.classList.contains('submenu-item')) return;
+        document.querySelectorAll('.menu-category').forEach(cat => {
+            if(cat !== category) cat.classList.remove('active');
+        });
+        category.classList.toggle('active');
+    });
+});
+document.addEventListener('click', function(e) {
+    if(!e.target.closest('.menu-category')) {
+        document.querySelectorAll('.menu-category').forEach(cat => cat.classList.remove('active'));
+    }
+});
+document.querySelectorAll('.submenu-item').forEach(item => {
+    item.addEventListener('mouseenter', () => {
+        gsap.to(item, {
+            scale: 1.07,
+            duration: 0.22,
+            ease: "power2.out"
+        });
+    });
+    item.addEventListener('mouseleave', () => {
+        gsap.to(item, {
+            scale: 1,
+            duration: 0.22,
+            ease: "power2.out"
+        });
+    });
+});
+</script>
+</body>
+</html>
+
+

@@ -4,31 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graficar Vector</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap Dark Theme (Bootswatch Darkly) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0 20px #000a;
+        }
+        .form-control, .btn {
+            border-radius: 0.5rem;
+        }
+        h1, label, .btn-primary {
+            color: #fff;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .form-row .form-group {
+            flex: 1 1 0;
+            min-width: 120px;
+            margin-bottom: 0;
+        }
+        .btn-center {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 991.98px) {
+            .flex-lg-row {
+                flex-direction: column !important;
+            }
+            .grafica-contenedor {
+                margin-top: 2rem;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        /* Centrado vertical absoluto para el formulario cuando no hay gráfica */
+        .center-vertical {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .center-vertical .bg-overlay {
+            width: 100%;
+            max-width: 400px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Graficar Vector en R2</h1>
-        <form method="post" class="mb-4">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="x">Coordenada X:</label>
-                <input type="number" name="x" id="x" class="form-control" required>
+{% if imagen %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="bg-overlay w-100">
+            <h1 class="mb-4 text-center">Graficar Vector en R<sub>2</sub></h1>
+            <div class="d-flex flex-lg-row flex-column align-items-stretch">
+                <!-- Formulario a la izquierda -->
+                <div class="col-lg-5 p-0 pr-lg-4 d-flex align-items-center">
+                    <form method="post" class="mb-4 w-100">
+                        {% csrf_token %}
+                        <div class="form-row mb-2">
+                            <div class="form-group">
+                                <label for="x">Coordenada X:</label>
+                                <input type="number" name="x" id="x" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="y">Coordenada Y:</label>
+                                <input type="number" name="y" id="y" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="btn-center">
+                            <button type="submit" class="btn btn-primary">Graficar</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Gráfica a la derecha -->
+                <div class="col-lg-7 p-0 grafica-contenedor d-flex align-items-center justify-content-center">
+                    <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico del vector" class="img-fluid" style="max-height: 400px; width: 100%; object-fit: contain; background: transparent;">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="y">Coordenada Y:</label>
-                <input type="number" name="y" id="y" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Graficar</button>
-        </form>
-
-        {% if imagen %}
-            <div class="mt-4">
-                <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico del vector" class="img-fluid">
-            </div>
-        {% endif %}
+        </div>
     </div>
-
+{% else %}
+    <div class="center-vertical">
+        <div class="bg-overlay">
+            <h1 class="mb-4 text-center">Graficar Vector en R<sub>2</sub></h1>
+            <form method="post" class="mb-4">
+                {% csrf_token %}
+                <div class="form-row mb-2">
+                    <div class="form-group">
+                        <label for="x">Coordenada X:</label>
+                        <input type="number" name="x" id="x" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="y">Coordenada Y:</label>
+                        <input type="number" name="y" id="y" class="form-control" required>
+                    </div>
+                </div>
+                <div class="btn-center">
+                    <button type="submit" class="btn btn-primary">Graficar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endif %}
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

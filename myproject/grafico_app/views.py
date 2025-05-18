@@ -12,8 +12,22 @@ import matplotlib.patches as patches
 def inicio(request):
     return render(request, 'grafico_app/Inicio.html')  # Asegúrate de tener este template
 
-def opciones_tareas(request):
-    return render(request, "grafico_app/Opciones_Tareas.html")
+def menu(request):
+    return render(request, "grafico_app/menu.html")
+
+from django.shortcuts import render
+
+def grafica_r2(request):
+    return render(request, 'grafico_app/vectorR2.html')
+
+def sumaR2(request):
+    return render(request, 'grafico_app/suma_vectoresR2.html')
+
+def restaR2(request):
+    return render(request, 'grafico_app/resta_vectoresR2.html')
+
+def multiplicacionR2(request):
+    return render(request, 'grafico_app/multiplicacion_vectoresR2.html')
 
 
 def graficar_vectorR2(request):
@@ -60,7 +74,7 @@ def grafico_vector(request):
         # Aquí puedes hacer lo que quieras con x, y, z
         # Por ejemplo, pasarlos al contexto para graficar
         return render(request, 'grafico_app/grafico_vector.html', {'x': x, 'y': y, 'z': z})
-    return render(request, 'grafico_app/form_vectorR3.html')
+    return render(request, 'grafico_app/grafico_vector.html')
 
 def PruebaR2(request):
     estado = request.session.get('estado', 'inicio')
