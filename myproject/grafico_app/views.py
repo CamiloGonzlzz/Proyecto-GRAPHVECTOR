@@ -7,7 +7,6 @@ import json
 import random
 import numpy as np
 import matplotlib.patches as patches
-import plotly.graph_objects as go
 from mpl_toolkits.mplot3d import Axes3D  # para gráfico 3D
 import math
 from django.urls import reverse

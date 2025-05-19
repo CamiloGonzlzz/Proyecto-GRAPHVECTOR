@@ -4,63 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplicación de Vectores R2</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap Dark Theme (Bootswatch Darkly) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css">
     <style>
+        body {
+            background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+            padding: 25px;
+        }
         .result-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid #6c757d;
+            background-color: rgba(52, 58, 64, 0.95);
+            border-left: 4px solid #17a2b8;
             padding: 15px;
             margin-top: 20px;
+            color: #f8f9fa;
+        }
+        .form-control {
+            background-color: #343a40;
+            color: #f8f9fa;
+            border: 1px solid #495057;
+        }
+        .form-control:focus {
+            background-color: #23272b;
+            color: #f8f9fa;
+        }
+        label {
+            color: #f8f9fa;
+        }
+        h1, h5 {
+            color: #f8f9fa;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .alert-info {
+            background-color: #17a2b8;
+            color: #fff;
+            border: none;
+        }
+        .alert-warning {
+            background-color: #ffc107;
+            color: #212529;
+            border: none;
+        }
+        .img-fluid {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+        }
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        .btn-primary:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+        .icon-mult {
+            font-size: 2rem;
+            color: #ffffff;
+            line-height: 2.3rem;
+            text-align: center;
+            width: 40px;
+            margin-top: 25px;
+        }
+        .input-group-custom {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 767.98px) {
+            .input-group-custom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .icon-mult {
+                margin: 10px 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Multiplicación de Vectores en R²</h1>
-        <form method="post" class="mb-4">
-            {% csrf_token %}
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label for="x1">X1 (A):</label>
-                    <input type="number" name="x1" id="x1" class="form-control" required>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="y1">Y1 (A):</label>
-                    <input type="number" name="y1" id="y1" class="form-control" required>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="x2">X2 (B):</label>
-                    <input type="number" name="x2" id="x2" class="form-control" required>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="y2">Y2 (B):</label>
-                    <input type="number" name="y2" id="y2" class="form-control" required>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Calcular</button>
-        </form>
-
-        {% if imagen %}
-            <div class="row">
-                <div class="col-md-8">
-                    <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico" class="img-fluid rounded border">
-                </div>
-                <div class="col-md-4">
-                    <div class="result-box">
-                        <h5 class="text-center mb-3">Resultados</h5>
-                        <div class="alert alert-info">
-                            <strong>Producto Escalar (A·B):</strong><br>
-                            {{ producto_escalar|floatformat:2 }}
-                        </div>
-                        <div class="alert alert-warning">
-                            <strong>Producto Vectorial (A×B):</strong><br>
-                            {{ producto_vectorial|floatformat:2 }}
-                        </div>
-                        <small class="text-muted">* El producto vectorial en R² es la magnitud en Z</small>
+    <div class="container">
+        <div class="bg-overlay">
+            <h1 class="mb-4 text-center">Multiplicación de Vectores en R²</h1>
+            <form method="post" class="mb-4">
+                {% csrf_token %}
+                <!-- Fila X1 × X2 -->
+                <div class="input-group-custom">
+                    <div class="form-group mb-0" style="flex:1;">
+                        <label for="x1">X1 (A):</label>
+                        <input type="number" name="x1" id="x1" class="form-control" required>
+                    </div>
+                    <span class="icon-mult">&times;</span>
+                    <div class="form-group mb-0" style="flex:1;">
+                        <label for="x2">X2 (B):</label>
+                        <input type="number" name="x2" id="x2" class="form-control" required>
                     </div>
                 </div>
-            </div>
-        {% endif %}
+                <!-- Fila Y1 × Y2 -->
+                <div class="input-group-custom">
+                    <div class="form-group mb-0" style="flex:1;">
+                        <label for="y1">Y1 (A):</label>
+                        <input type="number" name="y1" id="y1" class="form-control" required>
+                    </div>
+                    <span class="icon-mult">&times;</span>
+                    <div class="form-group mb-0" style="flex:1;">
+                        <label for="y2">Y2 (B):</label>
+                        <input type="number" name="y2" id="y2" class="form-control" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Calcular</button>
+            </form>
+
+            {% if imagen %}
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico" class="img-fluid rounded border">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="result-box">
+                            <h5 class="text-center mb-3">Resultados</h5>
+                            <div class="alert alert-info">
+                                <strong>Producto Escalar (A·B):</strong><br>
+                                {{ producto_escalar|floatformat:2 }}
+                            </div>
+                            <div class="alert alert-warning">
+                                <strong>Producto Vectorial (A×B):</strong><br>
+                                {{ producto_vectorial|floatformat:2 }}
+                            </div>
+                            <small class="text-muted">* El producto vectorial en R² es la magnitud en Z</small>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
