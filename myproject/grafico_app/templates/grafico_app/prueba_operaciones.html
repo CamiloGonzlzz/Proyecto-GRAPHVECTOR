@@ -1,0 +1,284 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Operaciones Vectoriales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --dark-bg: #1a1a2e;
+            --darker-bg: #16213e;
+            --card-bg: rgba(30, 30, 45, 0.9);
+            --primary-color: #4e73df;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card-vector {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .list-group-item {
+            background-color: rgba(40, 40, 60, 0.7);
+            border: 1px solid #495057;
+            color: white;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .list-group-item:hover {
+            background-color: rgba(40, 40, 60, 0.9);
+        }
+
+        .list-group-item input[type="radio"]:checked + label {
+            background-color: rgba(78, 115, 223, 0.3);
+        }
+
+        .vector-img {
+            max-height: 350px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .operation-badge {
+            font-size: 1.2rem;
+            background-color: rgba(78, 115, 223, 0.2);
+            border: 1px solid var(--primary-color);
+        }
+
+        .vector-info {
+            background: rgba(40, 40, 60, 0.7);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100 py-4">
+    <div class="container my-auto">
+        <div class="card card-vector p-4 mx-auto" style="max-width: 800px;">
+            <h1 class="text-center mb-4">
+                <i class="bi bi-calculator"></i> Prueba de Operaciones Vectoriales
+            </h1>
+
+            {# -----------------------------
+               ESTADO: INICIO
+            ------------------------------ #}
+            {% if estado == 'inicio' %}
+                <div class="alert alert-dark mb-4" style="background: rgba(30,30,45,0.95); border-left: 5px solid var(--primary-color);">
+                    <h4><i class="bi bi-info-circle"></i> Instrucciones:</h4>
+                    <p>Resuelve las operaciones con vectores que se presentan a continuación.</p>
+                    <ul>
+                        <li><strong>Suma:</strong> A + B = (A<sub>x</sub>+B<sub>x</sub>, A<sub>y</sub>+B<sub>y</sub>)</li>
+                        <li><strong>Resta:</strong> A - B = (A<sub>x</sub>-B<sub>x</sub>, A<sub>y</sub>-B<sub>y</sub>)</li>
+                        <li><strong>Producto escalar:</strong> A · B = A<sub>x</sub>×B<sub>x</sub> + A<sub>y</sub>×B<sub>y</sub></li>
+                        <li>Tendrás 10 preguntas en total (3‑4 de cada operación)</li>
+                    </ul>
+                </div>
+                <div class="text-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="accion" value="iniciar" class="btn btn-primary btn-lg px-5 py-3">
+                            <i class="bi bi-play-fill"></i> Comenzar Prueba
+                        </button>
+                    </form>
+                </div>
+
+            {# -----------------------------
+               ESTADO: PREGUNTA
+               (Solo vectores A y B, SIN vector resultado)
+            ------------------------------ #}
+            {% elif estado == 'pregunta' %}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Pregunta {{ correctas|add:incorrectas|add:1 }} de 10</h4>
+                    <span class="badge operation-badge py-2 px-3">
+                        Operación: {{ operacion }}
+                    </span>
+                </div>
+
+                {# ►►► Imagen SOLO con A y B - se asume que la vista la genera SIN resultado
+                   Si decidiste no generar imagen durante 'pregunta', comenta el bloque completo. #}
+                {% if imagen %}
+                <div class="text-center mb-4">
+                    <img src="data:image/png;base64,{{ imagen }}" alt="Vectores A y B" class="img-fluid vector-img">
+                </div>
+                {% endif %}
+
+                <div class="vector-info">
+                    <p class="mb-1"><strong>Vector A:</strong> ({{ vector1.0 }}, {{ vector1.1 }})</p>
+                    <p class="mb-1"><strong>Vector B:</strong> ({{ vector2.0 }}, {{ vector2.1 }})</p>
+                    <p class="mb-0"><strong>Operación:</strong>
+                        {% if operacion == "Suma" %}
+                            A + B (Suma de vectores)
+                        {% elif operacion == "Resta" %}
+                            A - B (Resta de vectores)
+                        {% else %}
+                            A · B (Producto escalar)
+                        {% endif %}
+                    </p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="list-group mb-4">
+                        {% for opcion in opciones %}
+                        <div class="list-group-item">
+                            <input type="radio" name="respuesta" id="opcion{{ forloop.counter }}" value="{{ opcion }}" class="form-check-input me-2">
+                            <label for="opcion{{ forloop.counter }}" class="w-100 mb-0 py-2">
+                                {% if operacion == "Multiplicacion" %}
+                                    Resultado: {{ opcion }}
+                                {% else %}
+                                    Vector resultante: ({{ opcion }})
+                                {% endif %}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" name="accion" value="responder" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-send-fill"></i> Enviar Respuesta
+                        </button>
+                    </div>
+                </form>
+
+            {# -----------------------------
+               ESTADO: RESPUESTA
+               (Ahora SÍ se muestra el vector resultado)
+            ------------------------------ #}
+            {% elif estado == 'respuesta' %}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Pregunta {{ correctas|add:incorrectas }} de 10</h4>
+                    <span class="badge operation-badge py-2 px-3">
+                        Operación: {{ operacion }}
+                    </span>
+                </div>
+
+                {# Imagen con A, B y Resultado #}
+                {% if imagen %}
+                <div class="text-center mb-4">
+                    <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico de vectores con resultado" class="img-fluid vector-img">
+                </div>
+                {% endif %}
+
+                <div class="alert {% if 'correcta' in mensaje %}alert-success{% else %}alert-danger{% endif %} mb-4">
+                    <h4 class="alert-heading">
+                        {% if 'correcta' in mensaje %}
+                            <i class="bi bi-check-circle-fill"></i> ¡Correcto!
+                        {% else %}
+                            <i class="bi bi-x-circle-fill"></i> Incorrecto
+                        {% endif %}
+                    </h4>
+                    <p>{{ mensaje }}</p>
+                </div>
+
+                <div class="text-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="accion" value="siguiente" class="btn btn-secondary btn-lg px-5">
+                            {% if correctas|add:incorrectas >= 9 %}
+                                <i class="bi bi-award-fill"></i> Ver Resultados
+                            {% else %}
+                                <i class="bi bi-arrow-right-circle-fill"></i> Siguiente Pregunta
+                            {% endif %}
+                        </button>
+                    </form>
+                </div>
+
+            {# -----------------------------
+               ESTADO: FINALIZADO
+            ------------------------------ #}
+            {% elif estado == 'finalizado' %}
+                <div class="text-center py-4">
+                    <h2 class="mb-4">
+                        <i class="bi bi-trophy-fill"></i> Resultados Finales
+                    </h2>
+
+                    <div class="display-2 mb-4 {% if correctas >= 8 %}text-success{% elif correctas >= 5 %}text-warning{% else %}text-danger{% endif %}">
+                        {{ correctas }}/10
+                    </div>
+
+                    <div class="alert {% if correctas >= 8 %}alert-success{% elif correctas >= 5 %}alert-warning{% else %}alert-danger{% endif %} mb-4">
+                        <h4 class="alert-heading">
+                            {% if correctas >= 8 %}
+                                ¡Excelente trabajo!
+                            {% elif correctas >= 5 %}
+                                Buen desempeño
+                            {% else %}
+                                Sigue practicando
+                            {% endif %}
+                        </h4>
+                        <p>
+                            {% if correctas >= 8 %}
+                                Dominas las operaciones con vectores.
+                            {% elif correctas >= 5 %}
+                                Vas por buen camino, pero puedes mejorar.
+                            {% else %}
+                                Revisa los conceptos básicos de operaciones vectoriales.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <a href="{% url 'prueba_operaciones' %}" class="btn btn-primary btn-lg px-5">
+                        <i class="bi bi-arrow-repeat"></i> Intentar Nuevamente
+                    </a>
+                </div>
+            {% endif %}
+
+            {# -----------------------------
+               Barra de progreso (visible en pregunta y respuesta)
+            ------------------------------ #}
+            {% if estado != 'inicio' and estado != 'finalizado' %}
+<div class="progress mt-4" style="height: 25px;">
+    <div class="progress-bar"  aria-valuenow="{{ correctas }}" aria-valuemin="0" aria-valuemax="10">
+        {{ correctas }} correctas
+    </div>
+
+    <div class="progress-bar bg-danger" role="progressbar"  aria-valuenow="{{ incorrectas }}" aria-valuemin="0" aria-valuemax="10">
+        Incorrectas: {{ incorrectas }}
+    </div>
+</div>
+{% endif %}
+
+        </div>
+    </div>
+
+    <footer class="text-center mt-4 text-muted">
+        <small>Sistema de Pruebas Vectoriales &copy; {% now "Y" %}</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mejora de interacción con las opciones de respuesta
+        document.querySelectorAll('.list-group-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (!e.target.closest('a')) { // Evitar conflictos con enlaces
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        // Actualizar estilos visualmente
+                        document.querySelectorAll('.list-group-item').forEach(i => {
+                            i.style.backgroundColor = '';
+                        });
+                        this.style.backgroundColor = 'rgba(78, 115, 223, 0.2)';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplicación de Vectores R3</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 15px;
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+        #grafico {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        .vector-group {
+            display: inline-block;
+            margin-right: 30px;
+            vertical-align: top;
+        }
+        .vector-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .info-box {
+            background: #e8f4ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4285f4;
+        }
+        .results {
+            background: #f0f7f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multiplicación de Vectores en R³</h1>
+        
+        <div class="info-box">
+            <strong>Información:</strong>
+            <ul>
+                <li><strong>Producto Escalar (A·B):</strong> Número que mide la magnitud y dirección relativa</li>
+                <li><strong>Producto Vectorial (A×B):</strong> Vector perpendicular a A y B</li>
+            </ul>
+        </div>
+        
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                <div class="vector-group">
+                    <div class="vector-title">Vector A</div>
+                    <div class="form-group">
+                        <label>X:</label>
+                        <input type="number" step="0.1" name="x1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Y:</label>
+                        <input type="number" step="0.1" name="y1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Z:</label>
+                        <input type="number" step="0.1" name="z1" required>
+                    </div>
+                </div>
+                
+                <div class="vector-group">
+                    <div class="vector-title">Vector B</div>
+                    <div class="form-group">
+                        <label>X:</label>
+                        <input type="number" step="0.1" name="x2" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Y:</label>
+                        <input type="number" step="0.1" name="y2" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Z:</label>
+                        <input type="number" step="0.1" name="z2" required>
+                    </div>
+                </div>
+                
+                <div style="clear: both;"></div>
+                <button type="submit">Calcular Productos</button>
+            </form>
+        </div>
+
+        {% if plot_html %}
+            <div id="grafico">
+                {{ plot_html|safe }}
+            </div>
+        {% else %}
+            <div id="grafico"></div>
+            <script>
+                // Mostrar un ejemplo inicial
+                document.addEventListener('DOMContentLoaded', function() {
+                    const colorProyecciones = '#003366';
+                    const estiloLinea = { color: colorProyecciones, width: 2, dash: 'dot' };
+                    const estiloPuntos = { color: colorProyecciones, size: 4 };
+
+                    function graficarEjemploMultiplicacion() {
+                        // Ejemplo: A = (2, 0, 0), B = (0, 2, 0) → A×B = (0, 0, 4)
+                        const fig = {
+                            data: [
+                                // Vector A (rojo)
+                                {
+                                    type: 'scatter3d',
+                                    mode: 'lines',
+                                    x: [0, 2], y: [0, 0], z: [0, 0],
+                                    line: { color: 'red', width: 6 },
+                                    name: 'A (2.0, 0.0, 0.0)'
+                                },
+                                // Vector B (verde)
+                                {
+                                    type: 'scatter3d',
+                                    mode: 'lines',
+                                    x: [0, 0], y: [0, 2], z: [0, 0],
+                                    line: { color: 'green', width: 6 },
+                                    name: 'B (0.0, 2.0, 0.0)'
+                                },
+                                // Producto vectorial (azul)
+                                {
+                                    type: 'scatter3d',
+                                    mode: 'lines',
+                                    x: [0, 0], y: [0, 0], z: [0, 4],
+                                    line: { color: 'blue', width: 6 },
+                                    name: 'A×B (0.0, 0.0, 4.0)'
+                                },
+                                // Proyecciones para A (rojo)
+                                { x: [2, 2], y: [0, 0], z: [0, 0], type: 'scatter3d', mode: 'lines', line: estiloLinea },
+                                { x: [0, 2], y: [0, 0], z: [0, 0], type: 'scatter3d', mode: 'lines', line: estiloLinea },
+                                // Proyecciones para B (verde)
+                                { x: [0, 0], y: [2, 2], z: [0, 0], type: 'scatter3d', mode: 'lines', line: estiloLinea },
+                                { x: [0, 0], y: [0, 2], z: [0, 0], type: 'scatter3d', mode: 'lines', line: estiloLinea },
+                                // Proyecciones para A×B (azul)
+                                { x: [0, 0], y: [0, 0], z: [0, 4], type: 'scatter3d', mode: 'lines', line: estiloLinea }
+                            ],
+                            layout: {
+                                margin: { l: 0, r: 0, b: 0, t: 30 },
+                                scene: {
+                                    xaxis: { title: 'X', range: [-1, 3] },
+                                    yaxis: { title: 'Y', range: [-1, 3] },
+                                    zaxis: { title: 'Z', range: [-1, 5] },
+                                    aspectmode: 'cube',
+                                    camera: { eye: { x: 1.5, y: 1.5, z: 0.8 } }
+                                },
+                                legend: { x: 0.85, y: 0.95 },
+                                title: {
+                                    text: "Producto Escalar: 0.00 | Producto Vectorial: (0.00, 0.00, 4.00)",
+                                    x: 0.5,
+                                    y: 0.95,
+                                    xanchor: 'center',
+                                    font: { size: 12 }
+                                }
+                            }
+                        };
+
+                        Plotly.newPlot('grafico', fig.data, fig.layout);
+                    }
+
+                    // Mostrar ejemplo inicial
+                    graficarEjemploMultiplicacion();
+                });
+            </script>
+        {% endif %}
+    </div>
+</body>
+</html>
