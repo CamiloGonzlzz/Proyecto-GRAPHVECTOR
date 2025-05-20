@@ -10,6 +10,7 @@ import matplotlib.patches as patches
 from mpl_toolkits.mplot3d import Axes3D  # para gráfico 3D
 import math
 from django.urls import reverse
+import plotly.graph_objects as go
 
 def inicio(request):
     return render(request, 'grafico_app/Inicio.html')  # Asegúrate de tener este template
