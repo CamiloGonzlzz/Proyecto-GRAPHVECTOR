@@ -32,6 +32,8 @@ def restaR2(request):
 def multiplicacionR2(request):
     return render(request, 'grafico_app/multiplicacion_vectoresR2.html')
 
+def PruebaR2_Menu(request):
+    return render(request, 'grafico_app/Prueba_R2.html')
 
 def graficar_vectorR2(request):
     if request.method == 'POST':
@@ -79,104 +81,74 @@ def grafico_vector(request):
         return render(request, 'grafico_app/grafico_vector.html', {'x': x, 'y': y, 'z': z})
     return render(request, 'grafico_app/grafico_vector.html')
 
-def PruebaR2(request):
-    estado = request.session.get('estado', 'inicio')
-    imagen = None
-    x_val = ''
-    y_val = ''
-    mensaje = ''
+def Prueba_FacilR2(request):
+    # Inicializar contadores
+    correctas = request.session.get('correctas', 0)
+    incorrectas = request.session.get('incorrectas', 0)
 
     if request.method == 'POST':
-        accion = request.POST.get('accion')
+        # Recuperar el vector correcto de la sesión
+        x_real = request.session.get('x_real')
+        y_real = request.session.get('y_real')
+        x_val = int(request.POST.get('x_val'))
+        y_val = int(request.POST.get('y_val'))
 
-        if accion == 'iniciar':
-            request.session['correctas'] = 0
-            request.session['incorrectas'] = 0
-            x = random.randint(1, 10)
-            y = random.randint(1, 10)
-            request.session['x_vector'] = x
-            request.session['y_vector'] = y
-            estado = 'pregunta'
+        # Verificar respuesta
+        correcto = (x_val == x_real) and (y_val == y_real)
+        if correcto:
+            correctas += 1
+            mensaje = f'✅ ¡Correcto! El vector es ({x_real}, {y_real})'
+        else:
+            incorrectas += 1
+            mensaje = f'❌ Incorrecto. El vector correcto era ({x_real}, {y_real})'
 
-        elif accion == 'responder':
-            x_correcto = request.session.get('x_vector')
-            y_correcto = request.session.get('y_vector')
-            x_val = request.POST.get('x_val', '')
-            y_val = request.POST.get('y_val', '')
+        request.session['correctas'] = correctas
+        request.session['incorrectas'] = incorrectas
 
-            try:
-                x_usuario = int(x_val)
-                y_usuario = int(y_val)
-                if x_usuario == x_correcto and y_usuario == y_correcto:
-                    request.session['correctas'] += 1
-                    mensaje = "¡Respuesta correcta!"
-                else:
-                    request.session['incorrectas'] += 1
-                    mensaje = f"Incorrecto. El vector era ({x_correcto}, {y_correcto})"
-            except ValueError:
-                request.session['incorrectas'] += 1
-                mensaje = "Debes ingresar valores numéricos."
+        # Graficar ambos vectores
+        fig, ax = plt.subplots()
+        ax.quiver(0, 0, x_real, y_real, angles='xy', scale_units='xy', scale=1, color='r', label='Correcto')
+        ax.quiver(0, 0, x_val, y_val, angles='xy', scale_units='xy', scale=1, color='b', linestyle='--', label='Tu respuesta')
+        ax.set_xlim(-10, 10)
+        ax.set_ylim(-10, 10)
+        ax.grid()
+        ax.legend()
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        plt.close(fig)
+        imagen = base64.b64encode(buf.getvalue()).decode('utf-8')
 
-            # Verifica si se llegó a 10 respuestas
-            total = request.session['correctas'] + request.session['incorrectas']
-            if total >= 10:
-                estado = 'finalizado'
-            else:
-                estado = 'respuesta'
+        return render(request, 'grafico_app/prueba_facilR2.html', {
+            'imagen': imagen,
+            'mensaje': mensaje,
+            'estado': 'respuesta',
+            'correctas': correctas,
+            'incorrectas': incorrectas
+        })
 
-        elif accion == 'siguiente':
-            # Verifica si se llegó a 10 respuestas antes de generar nueva pregunta
-            total = request.session['correctas'] + request.session['incorrectas']
-            if total >= 10:
-                estado = 'finalizado'
-            else:
-                x = random.randint(1, 10)
-                y = random.randint(1, 10)
-                request.session['x_vector'] = x
-                request.session['y_vector'] = y
-                estado = 'pregunta'
-                x_val = ''
-                y_val = ''
+    # GET: Generar nueva pregunta y gráfica
+    x_real = np.random.randint(-8, 8)
+    y_real = np.random.randint(-8, 8)
+    request.session['x_real'] = x_real
+    request.session['y_real'] = y_real
 
-        request.session['estado'] = estado
+    fig, ax = plt.subplots()
+    ax.quiver(0, 0, x_real, y_real, angles='xy', scale_units='xy', scale=1, color='r')
+    ax.set_xlim(-10, 10)
+    ax.set_ylim(-10, 10)
+    ax.grid()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    plt.close(fig)
+    imagen = base64.b64encode(buf.getvalue()).decode('utf-8')
 
-    else:
-        estado = 'inicio'
-        request.session['estado'] = estado
-
-    # Si hay que mostrar la gráfica
-    if estado in ['pregunta', 'respuesta']:
-        x = request.session.get('x_vector')
-        y = request.session.get('y_vector')
-        plt.figure()
-        plt.quiver(0, 0, x, y, angles='xy', scale_units='xy', scale=1, color='black')
-        plt.plot([0, x], [y, y], linestyle='--', color='blue')
-        plt.plot([x, x], [0, y], linestyle='--', color='red')
-        max_range = max(abs(x), abs(y)) + 1
-        plt.xlim(-max_range, max_range)
-        plt.ylim(-max_range, max_range)
-        plt.axhline(0, color='black', linewidth=0.5)
-        plt.axvline(0, color='black', linewidth=0.5)
-        plt.grid(color='gray', linestyle='--', linewidth=0.5)
-        # plt.legend()  # Ya no mostramos la leyenda
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        imagen_png = buffer.getvalue()
-        buffer64 = base64.b64encode(imagen_png)
-        imagen = buffer64.decode('utf-8')
-        plt.close()
-
-    context = {
+    return render(request, 'grafico_app/prueba_facilR2.html', {
         'imagen': imagen,
-        'x_val': x_val,
-        'y_val': y_val,
-        'correctas': request.session.get('correctas', 0),
-        'incorrectas': request.session.get('incorrectas', 0),
-        'mensaje': mensaje,
-        'estado': estado,
-    }
-    return render(request, 'grafico_app/Prueba_R2.html', context)
+        'estado': 'pregunta',
+        'correctas': correctas,
+        'incorrectas': incorrectas
+    })
+    
 
 def prueba_operaciones(request):
     # Inicializar estado y variables
