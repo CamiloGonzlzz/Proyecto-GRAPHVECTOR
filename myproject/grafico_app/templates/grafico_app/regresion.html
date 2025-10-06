@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión Lineal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+            padding: 25px;
+        }
+        h1, label, .btn-primary {
+            color: #fff;
+        }
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="bg-overlay w-100">
+        <h1 class="mb-4 text-center">Regresión Lineal</h1>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="x">Valores de X (separados por comas):</label>
+                <input type="text" name="x" id="x" class="form-control" placeholder="Ejemplo: 1, 2, 3, 4" required>
+            </div>
+            <div class="form-group">
+                <label for="y">Valores de Y (separados por comas):</label>
+                <input type="text" name="y" id="y" class="form-control" placeholder="Ejemplo: 2, 3, 5, 7" required>
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Graficar Regresión</button>
+            </div>
+        </form>
+
+        {% if imagen %}
+            <div class="text-center">
+                <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico de regresión" class="img-fluid mb-3">
+                <p><strong>Ecuación:</strong> y = {{ pendiente|floatformat:2 }}x + {{ intercepto|floatformat:2 }}</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

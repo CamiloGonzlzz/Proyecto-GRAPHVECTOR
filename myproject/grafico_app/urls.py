@@ -16,4 +16,7 @@ urlpatterns = [
     path('suma_vectoresR3/', views.suma_vectoresR3, name='suma_vectoresR3'),
     path('resta_vectoresR3/', views.resta_vectoresR3, name='resta_vectoresR3'),
     path('multiplicacion_vectoresR3/', views.multiplicacion_vectoresR3, name='multiplicacion_vectoresR3'),
+    path('regresion/', views.graficar_regresion_lineal, name='regresion_lineal'),
+    path('proyectil/', views.grafico_proyectil, name='grafico_proyectil'),
+    path('area-bajo-curva/', views.area_bajo_curva, name='area_bajo_curva'),
 ]

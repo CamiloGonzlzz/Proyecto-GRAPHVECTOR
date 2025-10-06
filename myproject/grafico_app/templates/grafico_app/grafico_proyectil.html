@@ -1,0 +1,174 @@
+<form method="post" id="vectorForm">
+    {% csrf_token %}
+   <body class="text-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-12">
+                <div class="bg-dark-blur p-4 mb-4">
+                    <h2 class="mb-3 text-center">Visualizador de Vector 3D - Proyectil</h2>
+                    <form id="vectorForm" autocomplete="off" class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <label for="inputV0" class="form-label">Velocidad Inicial (m/s)</label>
+                            <input type="number" class="form-control" id="inputV0" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label for="inputAngXY" class="form-label">Ángulo XY (°)</label>
+                            <input type="number" class="form-control" id="inputAngXY" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label for="inputAngZ" class="form-label">Ángulo Z (°)</label>
+                            <input type="number" class="form-control" id="inputAngZ" required>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary px-5 mt-2">Graficar</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="grafico" style="width:100%; height:600px; display:none; border-radius:12px; background:rgba(0,0,0,0.7); padding:1rem;"></div>
+            </div>
+        </div>
+    </div>
+
+</form>
+ <style>
+        body {
+            min-height: 100vh;
+            /* Imagen de fondo, puedes cambiar la URL por la que prefieras */
+            background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg0') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .bg-dark-blur {
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+        }
+        #grafico {
+            width: 100%;
+            height: 600px;
+            display: none; /* Oculto por defecto */
+            border-radius: 12px;
+            background: rgba(0,0,0,0.7);
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+        label, .form-label, .form-control, .btn {
+            color: #fff !important;
+        }
+        .form-control {
+            background: rgba(253, 253, 253, 0.9) !important;
+            border: 1px solid #ffffff !important;
+            color: #000000 !important;
+        }
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        @media (max-width: 600px) {
+            #grafico { height: 350px; }
+        }
+    </style>
+
+<div id="grafico" style="width:100%; height:600px; margin-top:1rem; display:none;"></div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+function proyectilConResistencia(v0, angXY, angZ, dt = 0.05, k = 0.1, g = 9.8) {
+    const radXY = angXY * Math.PI / 180;
+    const radZ = angZ * Math.PI / 180;
+
+    let vx = v0 * Math.cos(radZ) * Math.cos(radXY);
+    let vy = v0 * Math.cos(radZ) * Math.sin(radXY);
+    let vz = v0 * Math.sin(radZ);
+
+    let xArr = [0], yArr = [0], zArr = [0];
+    let vxArr = [vx], vyArr = [vy], vzArr = [vz];
+    let axArr = [], ayArr = [], azArr = [];
+
+    let x=0, y=0, z=0;
+    while(z >= 0) {
+        let ax = -k*vx;
+        let ay = -k*vy;
+        let az = -g - k*vz;
+
+        axArr.push(ax); ayArr.push(ay); azArr.push(az);
+
+        vx += ax*dt;
+        vy += ay*dt;
+        vz += az*dt;
+
+        vxArr.push(vx); vyArr.push(vy); vzArr.push(vz);
+
+        x += vx*dt;
+        y += vy*dt;
+        z += vz*dt;
+
+        xArr.push(x); yArr.push(y); zArr.push(z);
+    }
+
+    return {xArr, yArr, zArr, vxArr, vyArr, vzArr, axArr, ayArr, azArr};
+}
+
+function graficarProyectil() {
+    const v0 = parseFloat(document.getElementById('inputV0').value);
+    const angXY = parseFloat(document.getElementById('inputAngXY').value);
+    const angZ = parseFloat(document.getElementById('inputAngZ').value);
+
+    const datos = proyectilConResistencia(v0, angXY, angZ);
+
+    const tray = {
+        type: 'scatter3d',
+        mode: 'lines+markers',
+        x: datos.xArr, y: datos.yArr, z: datos.zArr,
+        line: { color:'#ff5555', width:4 },
+        name: 'Trayectoria'
+    };
+
+    let velVectores = [];
+    for(let i=0; i<datos.xArr.length; i+=10){
+        velVectores.push({
+            type:'scatter3d',
+            mode:'lines',
+            x:[datos.xArr[i], datos.xArr[i]+datos.vxArr[i]*0.5],
+            y:[datos.yArr[i], datos.yArr[i]+datos.vyArr[i]*0.5],
+            z:[datos.zArr[i], datos.zArr[i]+datos.vzArr[i]*0.5],
+            line:{color:'#00ff00', width:3},
+            name:'Velocidad'
+        });
+    }
+
+    let accVectores = [];
+    for(let i=0; i<datos.xArr.length; i+=10){
+        accVectores.push({
+            type:'scatter3d',
+            mode:'lines',
+            x:[datos.xArr[i], datos.xArr[i]+datos.axArr[i]*0.5],
+            y:[datos.yArr[i], datos.yArr[i]+datos.ayArr[i]*0.5],
+            z:[datos.zArr[i], datos.zArr[i]+datos.azArr[i]*0.5],
+            line:{color:'#0000ff', width:3},
+            name:'Aceleración'
+        });
+    }
+
+    const layout = {
+        scene: {
+            xaxis: {title:'X'},
+            yaxis: {title:'Y'},
+            zaxis: {title:'Z'}
+        },
+        margin: {l:0, r:0, b:0, t:0}
+    };
+
+    document.getElementById('grafico').style.display = 'block';
+    Plotly.newPlot('grafico', [tray, ...velVectores, ...accVectores], layout, {responsive:true});
+}
+
+document.getElementById('vectorForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    graficarProyectil();
+});
+</script>

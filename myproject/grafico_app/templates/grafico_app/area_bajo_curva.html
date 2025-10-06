@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Área bajo la curva</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .bg-dark-blur {
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+        }
+        #grafico {
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.7);
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+        label, .form-label, .form-control, .btn { color: #fff !important; }
+        .form-control {
+            background: rgba(253, 253, 253, 0.9) !important;
+            color: #000 !important;
+        }
+        .btn-primary { background-color: #17a2b8; border-color: #17a2b8; }
+    </style>
+</head>
+<body class="text-light">
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-12">
+            <div class="bg-dark-blur p-4 mb-4">
+                <h2 class="mb-3 text-center">Área bajo la curva</h2>
+                <form method="post" class="row g-3" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="col-12">
+                        <label class="form-label">Función f(x)</label>
+                        <input type="text" name="funcion" class="form-control" placeholder="Ejemplo: x**2 o np.sin(x)" value="{{ funcion }}">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Desde (a)</label>
+                        <input type="number" step="any" name="a" class="form-control" value="{{ a }}">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Hasta (b)</label>
+                        <input type="number" step="any" name="b" class="form-control" value="{{ b }}">
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary px-5 mt-2">Graficar</button>
+                    </div>
+                </form>
+            </div>
+            <div id="grafico"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const x = JSON.parse('{{ x_values|safe|escapejs }}');
+const y = JSON.parse('{{ y_values|safe|escapejs }}');
+
+    if (x.length > 0) {
+        const trace1 = {
+            x: x,
+            y: y,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: '#17a2b8', width: 3 },
+            name: 'f(x)'
+        };
+
+        const area = {
+            x: x,
+            y: y,
+            fill: 'tozeroy',
+            type: 'scatter',
+            mode: 'none',
+            fillcolor: 'rgba(23,162,184,0.4)',
+            name: 'Área bajo la curva'
+        };
+
+        const layout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            xaxis: { title: 'x', color: '#fff' },
+            yaxis: { title: 'f(x)', color: '#fff' },
+            font: { color: '#fff' }
+        };
+
+        Plotly.newPlot('grafico', [area, trace1], layout, {responsive: true});
+    }
+</script>
+
+</body>
+</html>

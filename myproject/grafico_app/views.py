@@ -1196,3 +1196,107 @@ def multiplicacion_vectoresR3(request):
         context['plot_html'] = fig.to_html(full_html=False, include_plotlyjs='cdn')
 
     return render(request, 'grafico_app/multiplicacion_vectoresR3.html', context)
+
+def graficar_regresion_lineal(request):
+    if request.method == 'POST':
+        # Obtener los puntos como listas separadas por comas
+        x_input = request.POST.get('x')
+        y_input = request.POST.get('y')
+
+        # Convertir a listas numéricas
+        try:
+            x = list(map(float, x_input.split(',')))
+            y = list(map(float, y_input.split(',')))
+        except Exception:
+            return render(request, 'grafico_app/regresion.html', {
+                'error': 'Por favor, ingrese valores numéricos separados por comas.'
+            })
+
+        if len(x) != len(y) or len(x) < 2:
+            return render(request, 'grafico_app/regresion.html', {
+                'error': 'Debe ingresar la misma cantidad de valores X e Y (mínimo 2).'
+            })
+
+        # Calcular regresión lineal
+        coeficientes = np.polyfit(x, y, 1)
+        pendiente, intercepto = coeficientes
+        y_pred = np.polyval(coeficientes, x)
+
+        # Crear la figura
+        plt.figure(figsize=(8, 6))
+        plt.scatter(x, y, color='cyan', label='Datos originales')
+        plt.plot(x, y_pred, color='orange', label=f'Regresión: y = {pendiente:.2f}x + {intercepto:.2f}')
+        plt.title('Regresión Lineal')
+        plt.xlabel('X')
+        plt.ylabel('Y')
+        plt.grid(True, linestyle='--', alpha=0.5)
+        plt.legend()
+
+        # Guardar la gráfica como imagen en memoria
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        imagen_png = buffer.getvalue()
+        buffer64 = base64.b64encode(imagen_png)
+        imagen = buffer64.decode('utf-8')
+        plt.close()
+
+        return render(request, 'grafico_app/regresion.html', {
+            'imagen': imagen,
+            'pendiente': pendiente,
+            'intercepto': intercepto
+        })
+
+    return render(request, 'grafico_app/regresion.html')
+
+from django.shortcuts import render
+
+def grafico_proyectil(request):
+    # Valores por defecto
+    v0 = 20      # m/s
+    angXY = 45   # grados
+    angZ = 30    # grados
+
+    if request.method == 'POST':
+        v0 = float(request.POST.get('v0', v0))
+        angXY = float(request.POST.get('angXY', angXY))
+        angZ = float(request.POST.get('angZ', angZ))
+
+    context = {
+        'v0': v0,
+        'angXY': angXY,
+        'angZ': angZ
+    }
+    return render(request, 'grafico_app/grafico_proyectil.html', context)
+
+def area_bajo_curva(request):
+    x_values = []
+    y_values = []
+    a = b = 0
+    funcion = ""
+
+    if request.method == 'POST':
+        try:
+            funcion = request.POST.get('funcion', 'x**2')
+            a = float(request.POST.get('a', 0))
+            b = float(request.POST.get('b', 2))
+
+            # Crear los puntos
+            x = np.linspace(a, b, 200)
+            y = eval(funcion.replace('x', 'x'))  # Evaluar la función
+
+            # Convertir a listas para Plotly
+            x_values = x.tolist()
+            y_values = y.tolist()
+
+        except Exception as e:
+            print("Error al evaluar la función:", e)
+
+    context = {
+        'x_values': json.dumps(x_values),
+        'y_values': json.dumps(y_values),
+        'a': a,
+        'b': b,
+        'funcion': funcion
+    }
+    return render(request, 'grafico_app/area_bajo_curva.html', context)
