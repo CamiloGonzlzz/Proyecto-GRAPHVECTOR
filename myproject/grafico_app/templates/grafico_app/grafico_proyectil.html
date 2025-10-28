@@ -1,12 +1,62 @@
-<form method="post" id="vectorForm">
-    {% csrf_token %}
-   <body class="text-light">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizador de Vector 3D - Proyectil</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .bg-dark-blur {
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+        }
+        #grafico {
+            width: 100%;
+            height: 600px;
+            display: none;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.7);
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+        label, .form-label, .form-control, .btn {
+            color: #fff !important;
+        }
+        .form-control {
+            background: #444 !important;
+            border: 1px solid #ccc !important;
+            color: #fff !important;
+        }
+
+        .form-control::placeholder {
+            color: #bbb !important;
+        }
+
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        @media (max-width: 600px) {
+            #grafico { height: 350px; }
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body class="text-light">
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8 col-12">
                 <div class="bg-dark-blur p-4 mb-4">
                     <h2 class="mb-3 text-center">Visualizador de Vector 3D - Proyectil</h2>
-                    <form id="vectorForm" autocomplete="off" class="row g-3">
+                    <form method="post" id="vectorForm" autocomplete="off" class="row g-3">
+                        {% csrf_token %}
                         <div class="col-12 col-md-4">
                             <label for="inputV0" class="form-label">Velocidad Inicial (m/s)</label>
                             <input type="number" class="form-control" id="inputV0" required>
@@ -24,58 +74,11 @@
                         </div>
                     </form>
                 </div>
-                <div id="grafico" style="width:100%; height:600px; display:none; border-radius:12px; background:rgba(0,0,0,0.7); padding:1rem;"></div>
+                <div id="grafico"></div>
             </div>
         </div>
     </div>
 
-</form>
- <style>
-        body {
-            min-height: 100vh;
-            /* Imagen de fondo, puedes cambiar la URL por la que prefieras */
-            background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg0') no-repeat center center fixed;
-            background-size: cover;
-        }
-        .bg-dark-blur {
-            background: rgba(0, 0, 0, 0.466);
-            border-radius: 18px;
-            backdrop-filter: blur(2px);
-            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
-        }
-        #grafico {
-            width: 100%;
-            height: 600px;
-            display: none; /* Oculto por defecto */
-            border-radius: 12px;
-            background: rgba(0,0,0,0.7);
-            margin-top: 1rem;
-            padding: 1rem;
-        }
-        label, .form-label, .form-control, .btn {
-            color: #fff !important;
-        }
-        .form-control {
-            background: rgba(253, 253, 253, 0.9) !important;
-            border: 1px solid #ffffff !important;
-            color: #000000 !important;
-        }
-        .btn-primary {
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-        }
-        .btn-primary {
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-        }
-        @media (max-width: 600px) {
-            #grafico { height: 350px; }
-        }
-    </style>
-
-<div id="grafico" style="width:100%; height:600px; margin-top:1rem; display:none;"></div>
-
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
 function proyectilConResistencia(v0, angXY, angZ, dt = 0.05, k = 0.1, g = 9.8) {
     const radXY = angXY * Math.PI / 180;
@@ -172,3 +175,5 @@ document.getElementById('vectorForm').addEventListener('submit', function(e){
     graficarProyectil();
 });
 </script>
+</body>
+</html>

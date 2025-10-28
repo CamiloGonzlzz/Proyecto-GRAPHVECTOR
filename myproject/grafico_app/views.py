@@ -35,6 +35,9 @@ def multiplicacionR2(request):
 def PruebaR2_Menu(request):
     return render(request, 'grafico_app/Prueba_R2.html')
 
+def Movimiento_Proyectil(request):
+    return render(request, 'grafico_app/MovimientoProyectil.html')
+
 def graficar_vectorR2(request):
     if request.method == 'POST':
         x = int(request.POST.get('x'))

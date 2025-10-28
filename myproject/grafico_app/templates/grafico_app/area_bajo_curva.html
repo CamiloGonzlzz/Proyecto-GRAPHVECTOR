@@ -19,6 +19,7 @@
             box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
         }
         #grafico {
+            display: none;  
             width: 100%;
             height: 600px;
             border-radius: 12px;
@@ -26,11 +27,19 @@
             margin-top: 1rem;
             padding: 1rem;
         }
+
+
         label, .form-label, .form-control, .btn { color: #fff !important; }
         .form-control {
-            background: rgba(253, 253, 253, 0.9) !important;
-            color: #000 !important;
+            background: #444 !important;
+            border: 1px solid #ccc !important;
+            color: #fff !important;
         }
+
+        .form-control::placeholder {
+            color: #bbb !important;
+        }
+
         .btn-primary { background-color: #17a2b8; border-color: #17a2b8; }
     </style>
 </head>
@@ -65,41 +74,45 @@
     </div>
 </div>
 
+
 <script>
 const x = JSON.parse('{{ x_values|safe|escapejs }}');
 const y = JSON.parse('{{ y_values|safe|escapejs }}');
 
-    if (x.length > 0) {
-        const trace1 = {
-            x: x,
-            y: y,
-            type: 'scatter',
-            mode: 'lines',
-            line: { color: '#17a2b8', width: 3 },
-            name: 'f(x)'
-        };
+if (x.length > 0) {
+    document.getElementById('grafico').style.display = 'block'; // Mostrar el div solo si hay datos
 
-        const area = {
-            x: x,
-            y: y,
-            fill: 'tozeroy',
-            type: 'scatter',
-            mode: 'none',
-            fillcolor: 'rgba(23,162,184,0.4)',
-            name: 'Área bajo la curva'
-        };
+    const trace1 = {
+        x: x,
+        y: y,
+        type: 'scatter',
+        mode: 'lines',
+        line: { color: '#17a2b8', width: 3 },
+        name: 'f(x)'
+    };
 
-        const layout = {
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            xaxis: { title: 'x', color: '#fff' },
-            yaxis: { title: 'f(x)', color: '#fff' },
-            font: { color: '#fff' }
-        };
+    const area = {
+        x: x,
+        y: y,
+        fill: 'tozeroy',
+        type: 'scatter',
+        mode: 'none',
+        fillcolor: 'rgba(23,162,184,0.4)',
+        name: 'Área bajo la curva'
+    };
 
-        Plotly.newPlot('grafico', [area, trace1], layout, {responsive: true});
-    }
+    const layout = {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        xaxis: { title: 'x', color: '#fff' },
+        yaxis: { title: 'f(x)', color: '#fff' },
+        font: { color: '#fff' }
+    };
+
+    Plotly.newPlot('grafico', [area, trace1], layout, {responsive: true});
+}
 </script>
+
 
 </body>
 </html>

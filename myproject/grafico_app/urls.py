@@ -19,4 +19,5 @@ urlpatterns = [
     path('regresion/', views.graficar_regresion_lineal, name='regresion_lineal'),
     path('proyectil/', views.grafico_proyectil, name='grafico_proyectil'),
     path('area-bajo-curva/', views.area_bajo_curva, name='area_bajo_curva'),
+    path('movimiento-proyectil/', views.Movimiento_Proyectil, name='movimiento_proyectil'),
 ]
