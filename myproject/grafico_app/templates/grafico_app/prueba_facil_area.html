@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Fácil - Área Bajo la Curva</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+        }
+        .bg-dark-transparent {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+            padding: 25px;
+        }
+        label, .form-control, .badge, .alert, .form-text {
+            color: #fff !important;
+        }
+        .form-control {
+            background-color: #343a40 !important;
+            border: 1px solid #495057;
+            color: #fff !important;
+        }
+        .btn-primary, .btn-secondary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        #grafico {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            min-height: 400px;
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="bg-dark-transparent">
+            <h1 class="mb-4 text-center">Prueba Fácil: Área Bajo la Curva</h1>
+
+            <!-- GRÁFICO -->
+            <div class="text-center">
+                <div id="grafico"></div>
+            </div>
+
+            {% if estado == 'pregunta' %}
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="area_respuesta"><strong>Calcula el área bajo la curva entre {{ a }} y {{ b }}:</strong></label>
+                        <input type="number" step="0.01" class="form-control" id="area_respuesta" name="area_respuesta" required placeholder="Ingresa tu cálculo">
+                        <small class="form-text">Función: <code>{{ funcion }}</code></small>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Verificar</button>
+                    </div>
+                </form>
+            {% elif estado == 'respuesta' %}
+                <div class="alert alert-dark mt-4" style="background: rgba(30,30,30,0.95); color: #fff; border: 1px solid #444;">
+                    {{ mensaje|safe }}
+                    {% if explicacion %}
+                        <hr>
+                        <p class="mb-0"><strong>Explicación:</strong> {{ explicacion }}</p>
+                    {% endif %}
+                </div>
+                <form method="get" class="text-center">
+                    <button type="submit" class="btn btn-secondary">Siguiente Pregunta</button>
+                </form>
+            {% endif %}
+
+            <div class="mt-4 text-center">
+                <span class="badge badge-success p-2">Aciertos: {{ correctas }}</span>
+                <span class="badge badge-danger p-2 ml-2">Errores: {{ incorrectas }}</span>
+            </div>
+        </div>
+    </div>
+    <div id="data-container" 
+     data-x='{{ x_values|safe }}' 
+     data-y='{{ y_values|safe }}'
+     data-funcion="{{ funcion }}"
+     data-a="{{ a }}"
+     data-b="{{ b }}"
+     style="display: none;">
+</div>
+
+   <script>
+    // Obtener datos de los data attributes
+    const dataContainer = document.getElementById('data-container');
+    const x = JSON.parse(dataContainer.dataset.x);
+    const y = JSON.parse(dataContainer.dataset.y);
+    const funcion = dataContainer.dataset.funcion;
+    const a = parseFloat(dataContainer.dataset.a);
+    const b = parseFloat(dataContainer.dataset.b);
+    
+    console.log("Datos X:", x);
+    console.log("Datos Y:", y);
+    console.log("Función:", funcion);
+    console.log("A:", a, "B:", b);
+
+    if (x && y && Array.isArray(x) && Array.isArray(y) && x.length > 0) {
+        const traceLine = {
+            x: x,
+            y: y,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: '#17a2b8', width: 3 },
+            name: 'f(x) = ' + funcion
+        };
+
+        const traceArea = {
+            x: x,
+            y: y,
+            fill: 'tozeroy',
+            type: 'scatter',
+            mode: 'none',
+            fillcolor: 'rgba(23,162,184,0.4)',
+            name: 'Área bajo la curva'
+        };
+
+        const layout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            xaxis: { 
+                title: 'x', 
+                color: '#fff',
+                range: [a - 0.5, b + 0.5]
+            },
+            yaxis: { 
+                title: 'f(x)', 
+                color: '#fff',
+                range: [0, Math.max(...y) * 1.2]
+            },
+            font: { color: '#fff' },
+            showlegend: true,
+            title: 'Calcula el área bajo la curva'
+        };
+
+        Plotly.newPlot('grafico', [traceArea, traceLine], layout, {responsive: true});
+        console.log("Gráfico creado exitosamente");
+    } else {
+        console.error("Datos inválidos para el gráfico");
+        document.getElementById('grafico').innerHTML = 
+            '<div class="alert alert-warning">No se pudieron cargar los datos del gráfico</div>';
+    }
+</script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

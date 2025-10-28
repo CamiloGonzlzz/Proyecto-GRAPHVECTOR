@@ -1202,11 +1202,9 @@ def multiplicacion_vectoresR3(request):
 
 def graficar_regresion_lineal(request):
     if request.method == 'POST':
-        # Obtener los puntos como listas separadas por comas
         x_input = request.POST.get('x')
         y_input = request.POST.get('y')
 
-        # Convertir a listas numéricas
         try:
             x = list(map(float, x_input.split(',')))
             y = list(map(float, y_input.split(',')))
@@ -1235,7 +1233,7 @@ def graficar_regresion_lineal(request):
         plt.grid(True, linestyle='--', alpha=0.5)
         plt.legend()
 
-        # Guardar la gráfica como imagen en memoria
+        # Guardar imagen como base64
         buffer = io.BytesIO()
         plt.savefig(buffer, format='png')
         buffer.seek(0)
@@ -1244,15 +1242,42 @@ def graficar_regresion_lineal(request):
         imagen = buffer64.decode('utf-8')
         plt.close()
 
+        # --- 🧠 Análisis de hipótesis ---
+        if abs(pendiente) < 0.01:  # Pendiente muy pequeña ≈ sin relación
+            decision = "Se acepta la hipótesis nula (H₀)."
+            explicacion = (
+                "La pendiente calculada es muy cercana a cero, "
+                "por lo tanto no se observa una relación lineal significativa entre las variables."
+            )
+        else:
+            decision = "Se rechaza la hipótesis nula (H₀)."
+            if pendiente > 0:
+                explicacion = (
+                    "La pendiente es positiva, lo que indica que existe una relación lineal directa: "
+                    "al aumentar X, también aumenta Y."
+                )
+            else:
+                explicacion = (
+                    "La pendiente es negativa, lo que indica una relación lineal inversa: "
+                    "al aumentar X, Y tiende a disminuir."
+                )
+
+        # --- 🔮 Predicción para T = 2000 ---
+        T = 2000
+        c_pred = pendiente * T + intercepto
+
         return render(request, 'grafico_app/regresion.html', {
             'imagen': imagen,
             'pendiente': pendiente,
-            'intercepto': intercepto
+            'intercepto': intercepto,
+            'decision': decision,
+            'explicacion': explicacion,
+            'c_pred': c_pred,
+            'T_pred': T
         })
 
     return render(request, 'grafico_app/regresion.html')
 
-from django.shortcuts import render
 
 def grafico_proyectil(request):
     # Valores por defecto
@@ -1303,3 +1328,250 @@ def area_bajo_curva(request):
         'funcion': funcion
     }
     return render(request, 'grafico_app/area_bajo_curva.html', context)
+
+def Prueba_Facil_Regresion(request):
+    # Inicializar contadores
+    correctas = request.session.get('correctas_regresion', 0)
+    incorrectas = request.session.get('incorrectas_regresion', 0)
+
+    if request.method == 'POST':
+        # Recuperar valores reales de la sesión
+        pendiente_real = request.session.get('pendiente_real')
+        intercepto_real = request.session.get('intercepto_real')
+        
+        # Obtener respuestas del usuario
+        try:
+            pendiente_usuario = float(request.POST.get('pendiente'))
+            intercepto_usuario = float(request.POST.get('intercepto'))
+        except (TypeError, ValueError):
+            pendiente_usuario = 0
+            intercepto_usuario = 0
+
+        # Verificar respuesta (con margen de error del 5%)
+        margen_error = 0.05
+        pendiente_correcta = abs(pendiente_usuario - pendiente_real) <= abs(pendiente_real * margen_error)
+        intercepto_correcto = abs(intercepto_usuario - intercepto_real) <= abs(intercepto_real * margen_error)
+        
+        correcto = pendiente_correcta and intercepto_correcto
+
+        if correcto:
+            correctas += 1
+            mensaje = f'✅ ¡Correcto! La ecuación es: y = {pendiente_real:.2f}x + {intercepto_real:.2f}'
+        else:
+            incorrectas += 1
+            mensaje = f'❌ Incorrecto. La ecuación correcta era: y = {pendiente_real:.2f}x + {intercepto_real:.2f}<br>'
+            mensaje += f'Tu respuesta: y = {pendiente_usuario:.2f}x + {intercepto_usuario:.2f}'
+
+        request.session['correctas_regresion'] = correctas
+        request.session['incorrectas_regresion'] = incorrectas
+
+        # Graficar ambas rectas
+        x_real = request.session.get('x_data')
+        y_real = request.session.get('y_data')
+        
+        fig, ax = plt.subplots(figsize=(10, 6))
+        
+        # Datos originales
+        ax.scatter(x_real, y_real, color='cyan', label='Datos', s=50)
+        
+        # Recta correcta
+        x_line = np.array([min(x_real), max(x_real)])
+        y_line_real = pendiente_real * x_line + intercepto_real
+        ax.plot(x_line, y_line_real, 'r-', linewidth=2, label=f'Correcto: y = {pendiente_real:.2f}x + {intercepto_real:.2f}')
+        
+        # Recta del usuario
+        y_line_usuario = pendiente_usuario * x_line + intercepto_usuario
+        ax.plot(x_line, y_line_usuario, 'b--', linewidth=2, label=f'Tu respuesta: y = {pendiente_usuario:.2f}x + {intercepto_usuario:.2f}')
+        
+        ax.set_xlim(min(x_real)-1, max(x_real)+1)
+        ax.set_ylim(min(y_real)-1, max(y_real)+1)
+        ax.grid(True, alpha=0.3)
+        ax.legend()
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_title('Regresión Lineal - Comparación')
+        
+        # Convertir a base64
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', dpi=100, bbox_inches='tight')
+        plt.close(fig)
+        imagen = base64.b64encode(buf.getvalue()).decode('utf-8')
+
+        return render(request, 'grafico_app/prueba_facil_regresion.html', {
+            'imagen': imagen,
+            'mensaje': mensaje,
+            'estado': 'respuesta',
+            'correctas': correctas,
+            'incorrectas': incorrectas
+        })
+
+    # GET: Generar nueva pregunta
+    # Crear datos aleatorios para la regresión
+    n_puntos = np.random.randint(5, 8)  # Entre 5 y 7 puntos
+    x_real = np.random.uniform(1, 10, n_puntos)
+    
+    # Generar pendiente e intercepto aleatorios
+    pendiente_real = np.random.uniform(-3, 3)
+    intercepto_real = np.random.uniform(-5, 5)
+    
+    # Agregar algo de ruido a los datos
+    ruido = np.random.normal(0, 0.5, n_puntos)
+    y_real = pendiente_real * x_real + intercepto_real + ruido
+
+    # Guardar en sesión
+    request.session['pendiente_real'] = pendiente_real
+    request.session['intercepto_real'] = intercepto_real
+    request.session['x_data'] = x_real.tolist()
+    request.session['y_data'] = y_real.tolist()
+
+    # Graficar solo los datos (sin la recta)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(x_real, y_real, color='cyan', s=60)
+    ax.grid(True, alpha=0.3)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('Encuentra la recta de regresión para estos datos')
+    
+    # Ajustar límites
+    ax.set_xlim(min(x_real)-1, max(x_real)+1)
+    ax.set_ylim(min(y_real)-1, max(y_real)+1)
+
+    # Convertir a base64
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', dpi=100, bbox_inches='tight')
+    plt.close(fig)
+    imagen = base64.b64encode(buf.getvalue()).decode('utf-8')
+
+    return render(request, 'grafico_app/prueba_facil_regresion.html', {
+        'imagen': imagen,
+        'estado': 'pregunta',
+        'correctas': correctas,
+        'incorrectas': incorrectas
+    })
+
+
+import numpy as np
+import json
+from django.shortcuts import render
+
+def Prueba_Facil_Area(request):
+    # Inicializar contadores
+    correctas = request.session.get('correctas_area', 0)
+    incorrectas = request.session.get('incorrectas_area', 0)
+
+    if request.method == 'POST':
+        # Recuperar valores reales de la sesión
+        area_real = request.session.get('area_real')
+        funcion_real = request.session.get('funcion_real')
+        a_real = request.session.get('a_real')
+        b_real = request.session.get('b_real')
+        
+        # Obtener respuesta del usuario
+        try:
+            area_usuario = float(request.POST.get('area_respuesta'))
+        except (TypeError, ValueError):
+            area_usuario = 0
+
+        # Verificar respuesta (con margen de error del 10%)
+        margen_error = 0.10
+        correcto = abs(area_usuario - area_real) <= abs(area_real * margen_error)
+
+        if correcto:
+            correctas += 1
+            mensaje = f'✅ ¡Correcto! El área bajo la curva es aproximadamente {area_real:.2f}'
+        else:
+            incorrectas += 1
+            mensaje = f'❌ Incorrecto. El área real es {area_real:.2f}<br>Tu respuesta: {area_usuario:.2f}'
+
+        # Explicación adicional
+        explicacion = f"El área bajo f(x) = {funcion_real} desde {a_real} hasta {b_real} se calcula mediante integración definida."
+
+        request.session['correctas_area'] = correctas
+        request.session['incorrectas_area'] = incorrectas
+
+        # Preparar datos para el gráfico
+        x_values = request.session.get('x_data', [])
+        y_values = request.session.get('y_data', [])
+
+        return render(request, 'grafico_app/prueba_facil_area.html', {
+            'x_values': json.dumps(x_values),
+            'y_values': json.dumps(y_values),
+            'funcion': funcion_real,
+            'a': a_real,
+            'b': b_real,
+            'mensaje': mensaje,
+            'explicacion': explicacion,
+            'estado': 'respuesta',
+            'correctas': correctas,
+            'incorrectas': incorrectas
+        })
+
+    # GET: Generar nueva pregunta
+    # Seleccionar función aleatoria con áreas precalculadas
+    funciones = [
+        {'func': 'x**2', 'nombre': 'x²', 'a': 0, 'b': 3, 'area': 9.0},
+        {'func': 'x', 'nombre': 'x', 'a': 0, 'b': 4, 'area': 8.0},
+        {'func': 'np.sqrt(x)', 'nombre': '√x', 'a': 0, 'b': 4, 'area': 5.33},
+        {'func': 'x**3', 'nombre': 'x³', 'a': 0, 'b': 2, 'area': 4.0},
+        {'func': '2*x + 1', 'nombre': '2x + 1', 'a': 0, 'b': 3, 'area': 12.0},
+        {'func': '4 - x**2', 'nombre': '4 - x²', 'a': 0, 'b': 2, 'area': 5.33},
+        {'func': 'np.sin(x)', 'nombre': 'sin(x)', 'a': 0, 'b': 3.14, 'area': 2.0},
+        {'func': 'np.exp(x/2)', 'nombre': 'e^(x/2)', 'a': 0, 'b': 2, 'area': 2.3}
+    ]
+    
+    funcion_data = np.random.choice(funciones)
+    funcion_str = funcion_data['func']
+    funcion_nombre = funcion_data['nombre']
+    a = funcion_data['a']
+    b = funcion_data['b']
+    area_real = funcion_data['area']
+
+    # Generar puntos para el gráfico - FORMA CORREGIDA
+    x = np.linspace(a, b, 200)
+    
+    # Evaluar la función de forma segura
+    try:
+        if 'np.sqrt' in funcion_str:
+            y = np.sqrt(x)
+        elif 'np.sin' in funcion_str:
+            y = np.sin(x)
+        elif 'np.exp' in funcion_str:
+            y = np.exp(x/2)
+        else:
+            # Para funciones básicas sin numpy
+            y = eval(funcion_str, {'x': x, 'np': np})
+    except Exception as e:
+        # En caso de error, usar función por defecto
+        print(f"Error evaluando función: {e}")
+        y = x**2
+
+    # Asegurarse de que no hay valores NaN o infinitos
+    y = np.nan_to_num(y, nan=0.0, posinf=10.0, neginf=0.0)
+    
+    # Convertir a listas Python
+    x_list = x.tolist()
+    y_list = y.tolist()
+
+    # DEBUG: Verificar los datos
+    print(f"Función: {funcion_nombre}")
+    print(f"X: {x_list[:5]}...")  # Primeros 5 elementos
+    print(f"Y: {y_list[:5]}...")  # Primeros 5 elementos
+
+    # Guardar en sesión
+    request.session['area_real'] = area_real
+    request.session['funcion_real'] = funcion_nombre
+    request.session['a_real'] = a
+    request.session['b_real'] = b
+    request.session['x_data'] = x_list
+    request.session['y_data'] = y_list
+
+    return render(request, 'grafico_app/prueba_facil_area.html', {
+        'x_values': json.dumps(x_list),
+        'y_values': json.dumps(y_list),
+        'funcion': funcion_nombre,
+        'a': a,
+        'b': b,
+        'estado': 'pregunta',
+        'correctas': correctas,
+        'incorrectas': incorrectas
+    })

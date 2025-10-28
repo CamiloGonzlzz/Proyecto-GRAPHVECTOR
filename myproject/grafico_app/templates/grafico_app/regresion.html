@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,10 +15,10 @@
             min-height: 100vh;
         }
         .bg-overlay {
-            background: rgba(0, 0, 0, 0.466);
+            background: rgba(0, 0, 0, 0.55);
             border-radius: 18px;
-            backdrop-filter: blur(2px);
-            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+            backdrop-filter: blur(3px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.25);
             padding: 25px;
         }
         h1, label, .btn-primary {
@@ -65,6 +67,17 @@
             <div class="text-center">
                 <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico de regresión" class="img-fluid mb-3">
                 <p><strong>Ecuación:</strong> y = {{ pendiente|floatformat:2 }}x + {{ intercepto|floatformat:2 }}</p>
+
+                <div class="alert alert-info text-left mt-3">
+                    <h5><strong>🔍 Análisis de hipótesis</strong></h5>
+                    <p><strong>Decisión:</strong> {{ decision }}</p>
+                    <p>{{ explicacion }}</p>
+                </div>
+
+                <div class="alert alert-success text-left mt-3">
+                    <h5><strong>🔮 Predicción</strong></h5>
+                    <p>Para T = {{ T_pred }}, el modelo predice que <strong>c ≈ {{ c_pred|floatformat:2 }}</strong>.</p>
+                </div>
             </div>
         {% endif %}
     </div>

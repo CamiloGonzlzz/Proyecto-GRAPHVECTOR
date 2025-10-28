@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     path('', views.inicio, name='inicio'),  # Vista para la página de inicio
     path('R2', views.graficar_vectorR2, name='vectorR2'),
@@ -20,4 +21,6 @@ urlpatterns = [
     path('proyectil/', views.grafico_proyectil, name='grafico_proyectil'),
     path('area-bajo-curva/', views.area_bajo_curva, name='area_bajo_curva'),
     path('movimiento-proyectil/', views.Movimiento_Proyectil, name='movimiento_proyectil'),
+    path('prueba-regresion/', views.Prueba_Facil_Regresion, name='prueba-regresion'),
+    path('prueba-area/', views.Prueba_Facil_Area, name='prueba_area'),
 ]
