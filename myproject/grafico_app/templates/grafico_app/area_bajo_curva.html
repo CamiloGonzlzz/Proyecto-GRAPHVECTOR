@@ -28,18 +28,15 @@
             padding: 1rem;
         }
 
-
         label, .form-label, .form-control, .btn { color: #fff !important; }
         .form-control {
             background: #444 !important;
             border: 1px solid #ccc !important;
             color: #fff !important;
         }
-
         .form-control::placeholder {
             color: #bbb !important;
         }
-
         .btn-primary { background-color: #17a2b8; border-color: #17a2b8; }
     </style>
 </head>
@@ -47,30 +44,83 @@
 
 <div class="container py-5">
     <div class="row justify-content-center">
+        
+        <!-- COLUMNA IZQUIERDA -->
         <div class="col-lg-6 col-md-8 col-12">
             <div class="bg-dark-blur p-4 mb-4">
                 <h2 class="mb-3 text-center">Área bajo la curva</h2>
+
                 <form method="post" class="row g-3" autocomplete="off">
                     {% csrf_token %}
                     <div class="col-12">
                         <label class="form-label">Función f(x)</label>
                         <input type="text" name="funcion" class="form-control" placeholder="Ejemplo: x**2 o np.sin(x)" value="{{ funcion }}">
                     </div>
+
                     <div class="col-6">
                         <label class="form-label">Desde (a)</label>
                         <input type="number" step="any" name="a" class="form-control" value="{{ a }}">
                     </div>
+
                     <div class="col-6">
                         <label class="form-label">Hasta (b)</label>
                         <input type="number" step="any" name="b" class="form-control" value="{{ b }}">
                     </div>
+
                     <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary px-5 mt-2">Graficar</button>
                     </div>
                 </form>
             </div>
+
             <div id="grafico"></div>
         </div>
+
+        <!-- COLUMNA DERECHA: TEORÍA -->
+        <div class="col-lg-4 col-md-10 mt-4 mt-lg-0">
+            <div class="bg-dark-blur p-4">
+                <h3 class="text-center">📘 Teoría: Área bajo la curva</h3>
+                <hr>
+
+                <p>
+                    El <strong>área bajo la curva</strong> de una función \( f(x) \) entre los puntos 
+                    \( x = a \) y \( x = b \) se obtiene mediante la <strong>integral definida</strong>:
+                </p>
+
+                <div class="text-center">
+                    <img src="https://i.imgur.com/rRb1t2i.png" style="max-width: 90%;">
+                </div>
+
+                <p class="mt-3">
+                    Matemáticamente:
+                </p>
+
+                <pre style="background:#222; color:#0ff; padding:10px; border-radius:8px;">
+Área = ∫[a,b] f(x) dx
+                </pre>
+
+                <p>
+                    Esta integral representa la suma infinita de pequeñas áreas rectangulares bajo la gráfica 
+                    de la función. Esto se aproxima mediante:
+                </p>
+
+                <ul>
+                    <li>Regla de los rectángulos</li>
+                    <li>Regla del trapecio</li>
+                    <li>Suma de Riemann</li>
+                </ul>
+
+                <p>
+                    En tu gráfica, el área se muestra como la región sombreada debajo de la curva.  
+                </p>
+
+                <div class="text-center">
+                    <img src="https://i.imgur.com/d9yP2sB.png" style="max-width: 100%; border-radius:10px;">
+                </div>
+
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -80,7 +130,7 @@ const x = JSON.parse('{{ x_values|safe|escapejs }}');
 const y = JSON.parse('{{ y_values|safe|escapejs }}');
 
 if (x.length > 0) {
-    document.getElementById('grafico').style.display = 'block'; // Mostrar el div solo si hay datos
+    document.getElementById('grafico').style.display = 'block';
 
     const trace1 = {
         x: x,
@@ -112,7 +162,6 @@ if (x.length > 0) {
     Plotly.newPlot('grafico', [area, trace1], layout, {responsive: true});
 }
 </script>
-
 
 </body>
 </html>

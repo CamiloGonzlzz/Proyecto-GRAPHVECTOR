@@ -5,42 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suma de Vectores R3</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <style>
         body {
             min-height: 100vh;
             background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
             background-size: cover;
         }
-        .container {
+        .bg-dark-blur {
             background: rgba(0, 0, 0, 0.466);
             border-radius: 18px;
             backdrop-filter: blur(2px);
-            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
-            padding: 25px;
-            max-width: 800px;
-            margin: 40px auto;
-        }
-        h1 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .vector-title {
-            font-weight: bold;
-            color: #f8f9fa;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-        .info-box {
-            background: rgba(13, 110, 253, 0.15);
-            color: #dbeafe;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 18px;
-            border-left: 5px solid #0d6efd;
+            box-shadow: 0 8px 32px rgba(255,255,255,0.6);
         }
         #grafico {
             width: 100%;
@@ -48,188 +26,211 @@
             border-radius: 8px;
             margin-top: 18px;
         }
-        .input-group-icon {
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 2rem;
-            padding: 0 8px;
+        .teoria-box {
+            background: rgba(255,255,255,0.08);
+            border-left: 6px solid #17a2b8;
+            padding: 18px;
+            border-radius: 12px;
+            color: #e2e6ea;
         }
-        .form-label {
-            color: #adb5bd;
-            font-weight: 500;
-            margin-bottom: 4px;
+        .teoria-box h3 {
+            color: #17a2b8;
         }
         .form-control {
-            max-width: 170px;
-            min-width: 120px;
-            font-size: 1.2rem;
-            padding: 10px 12px;
-            margin: 0 2px;
-            display: inline-block;
-        }
-        @media (max-width: 600px) {
-            .form-control {
-                max-width: 100%;
-                min-width: 60px;
-                font-size: 1rem;
-            }
-        }
-        .btn-primary {
-            background-color: #17a2b8;
-            border-color: #17a2b8;
+            font-size: 1.1rem;
         }
     </style>
 </head>
+
 <body>
-    <div class="container shadow-lg">
-        <h1>Suma de Vectores en R³</h1>
-        <div class="info-box">
-            <strong>Nota:</strong> La suma A + B se calcula sumando cada componente correspondiente.
+
+<div class="container py-4">
+    <div class="row g-4">
+
+        <!-- COLUMNA IZQUIERDA (Formulario + gráfico) -->
+        <div class="col-lg-8">
+            <div class="bg-dark-blur p-4">
+
+                <h1 class="text-center mb-3">Suma de Vectores en R³</h1>
+
+                <div class="info-box mb-3" style="
+                    background: rgba(13, 110, 253, 0.15);
+                    padding:12px;border-radius:6px;border-left:5px solid #0d6efd;">
+                    <strong>Nota:</strong> La suma A + B se calcula sumando cada componente correspondiente.
+                </div>
+
+                <form id="vectorForm" autocomplete="off">
+                    <div class="row text-center mb-2">
+                        <div class="col-5 vector-title">Vector A</div>
+                        <div class="col-2"></div>
+                        <div class="col-5 vector-title">Vector B</div>
+                    </div>
+
+                    <!-- X -->
+                    <div class="row mb-2 justify-content-center align-items-center">
+                        <div class="col-5 text-center">
+                            <label class="form-label">X<sub>A</sub></label>
+                            <input type="number" step="0.1" id="x1" class="form-control text-center" required>
+                        </div>
+                        <div class="col-2 text-center">
+                            <i class="bi bi-plus fs-2"></i>
+                        </div>
+                        <div class="col-5 text-center">
+                            <label class="form-label">X<sub>B</sub></label>
+                            <input type="number" step="0.1" id="x2" class="form-control text-center" required>
+                        </div>
+                    </div>
+
+                    <!-- Y -->
+                    <div class="row mb-2 justify-content-center align-items-center">
+                        <div class="col-5 text-center">
+                            <label class="form-label">Y<sub>A</sub></label>
+                            <input type="number" step="0.1" id="y1" class="form-control text-center" required>
+                        </div>
+                        <div class="col-2 text-center">
+                            <i class="bi bi-plus fs-2"></i>
+                        </div>
+                        <div class="col-5 text-center">
+                            <label class="form-label">Y<sub>B</sub></label>
+                            <input type="number" step="0.1" id="y2" class="form-control text-center" required>
+                        </div>
+                    </div>
+
+                    <!-- Z -->
+                    <div class="row mb-4 justify-content-center align-items-center">
+                        <div class="col-5 text-center">
+                            <label class="form-label">Z<sub>A</sub></label>
+                            <input type="number" step="0.1" id="z1" class="form-control text-center" required>
+                        </div>
+                        <div class="col-2 text-center">
+                            <i class="bi bi-plus fs-2"></i>
+                        </div>
+                        <div class="col-5 text-center">
+                            <label class="form-label">Z<sub>B</sub></label>
+                            <input type="number" step="0.1" id="z2" class="form-control text-center" required>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-4">Calcular Suma (A + B)</button>
+                    </div>
+                </form>
+
+                <div id="grafico" class="d-none"></div>
+            </div>
         </div>
-        <div class="form-container mb-4">
-            <form id="vectorForm" autocomplete="off">
-                <div class="row text-center mb-2">
-                    <div class="col-5 vector-title">Vector A</div>
-                    <div class="col-2"></div>
-                    <div class="col-5 vector-title">Vector B</div>
-                </div>
-                <!-- X -->
-                <div class="row align-items-center mb-2 gx-1 justify-content-center">
-                    <div class="col-5 d-flex flex-column align-items-center">
-                        <label for="x1" class="form-label">X<sub>A</sub></label>
-                        <input type="number" step="0.1" id="x1" name="x1" class="form-control text-center" required>
-                    </div>
-                    <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
-                        <span class="input-group-icon">
-                            <i class="bi bi-plus"></i>
-                        </span>
-                    </div>
-                    <div class="col-5 d-flex flex-column align-items-center">
-                        <label for="x2" class="form-label">X<sub>B</sub></label>
-                        <input type="number" step="0.1" id="x2" name="x2" class="form-control text-center" required>
-                    </div>
-                </div>
-                <!-- Y -->
-                <div class="row align-items-center mb-2 gx-1 justify-content-center">
-                    <div class="col-5 d-flex flex-column align-items-center">
-                        <label for="y1" class="form-label">Y<sub>A</sub></label>
-                        <input type="number" step="0.1" id="y1" name="y1" class="form-control text-center" required>
-                    </div>
-                    <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
-                        <span class="input-group-icon">
-                            <i class="bi bi-plus"></i>
-                        </span>
-                    </div>
-                    <div class="col-5 d-flex flex-column align-items-center">
-                        <label for="y2" class="form-label">Y<sub>B</sub></label>
-                        <input type="number" step="0.1" id="y2" name="y2" class="form-control text-center" required>
-                    </div>
-                </div>
-                <!-- Z -->
-                <div class="row align-items-center mb-4 gx-1 justify-content-center">
-                    <div class="col-5 d-flex flex-column align-items-center">
-                        <label for="z1" class="form-label">Z<sub>A</sub></label>
-                        <input type="number" step="0.1" id="z1" name="z1" class="form-control text-center" required>
-                    </div>
-                    <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
-                        <span class="input-group-icon">
-                            <i class="bi bi-plus"></i>
-                        </span>
-                    </div>
-                    <div class="col-5 d-flex flex-column align-items-center">
-                        <label for="z2" class="form-label">Z<sub>B</sub></label>
-                        <input type="number" step="0.1" id="z2" name="z2" class="form-control text-center" required>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <button type="submit" id="calcularBtn" class="btn btn-primary px-4">Calcular Suma (A + B)</button>
-                </div>
-            </form>
+
+        <!-- COLUMNA DERECHA (TEORÍA) -->
+        <div class="col-lg-4">
+            <div class="teoria-box">
+                <h3>📘 Teoría: Suma de vectores en R³</h3>
+                <p>
+                    La suma de dos vectores en el espacio tridimensional R³ se realiza sumando
+                    cada componente correspondiente:
+                </p>
+
+                <p class="text-center fs-5">
+                    <strong>A = (x₁, y₁, z₁)</strong><br>
+                    <strong>B = (x₂, y₂, z₂)</strong>
+                </p>
+
+                <p class="text-center fs-5">
+                    <strong>A + B = (x₁ + x₂, y₁ + y₂, z₁ + z₂)</strong>
+                </p>
+
+                <p>Geométricamente, la suma de vectores se interpreta usando la ley del paralelogramo o “cabeza con cola”.</p>
+
+                <ul>
+                    <li>El vector A se dibuja desde el origen.</li>
+                    <li>El vector B también se dibuja desde el origen.</li>
+                    <li>El vector suma A+B es la diagonal del paralelogramo formado.</li>
+                </ul>
+
+                <p>Esta visualización es muy útil en física para fuerzas, desplazamientos y campos.</p>
+            </div>
         </div>
-        <div id="grafico" class="d-none"></div>
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Dibuja las 12 aristas del cubo desde (0,0,0) hasta (x,y,z)
-        function cuboExtrapolar(x, y, z, color='#fff', width=2) {
-            let v = [
-                [0,0,0], [x,0,0], [x,y,0], [0,y,0],
-                [0,0,z], [x,0,z], [x,y,z], [0,y,z]
-            ];
-            let edges = [
-                [0,1],[1,2],[2,3],[3,0], // base z=0
-                [4,5],[5,6],[6,7],[7,4], // base z=z
-                [0,4],[1,5],[2,6],[3,7]  // verticales
-            ];
-            let traces = [];
-            for (let e of edges) {
-                traces.push({
-                    type: 'scatter3d',
-                    mode: 'lines',
-                    x: [v[e[0]][0], v[e[1]][0]],
-                    y: [v[e[0]][1], v[e[1]][1]],
-                    z: [v[e[0]][2], v[e[1]][2]],
-                    line: {color: color, width: width, dash: 'dot'},
-                    showlegend: false
-                });
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function cuboExtrapolar(x, y, z, color='#fff', width=2) {
+        let v = [
+            [0,0,0], [x,0,0], [x,y,0], [0,y,0],
+            [0,0,z], [x,0,z], [x,y,z], [0,y,z]
+        ];
+        let edges = [
+            [0,1],[1,2],[2,3],[3,0],
+            [4,5],[5,6],[6,7],[7,4],
+            [0,4],[1,5],[2,6],[3,7]
+        ];
+        let traces = [];
+        for (let e of edges) {
+            traces.push({
+                type: 'scatter3d',
+                mode: 'lines',
+                x: [v[e[0]][0], v[e[1]][0]],
+                y: [v[e[0]][1], v[e[1]][1]],
+                z: [v[e[0]][2], v[e[1]][2]],
+                line: { color: color, width: width, dash: 'dot' },
+                showlegend: false
+            });
+        }
+        return traces;
+    }
+
+    function graficarVectores(x1, y1, z1, x2, y2, z2) {
+        const xs = x1 + x2, ys = y1 + y2, zs = z1 + z2;
+
+        let data = [
+            { type:'scatter3d', mode:'lines', x:[0,x1], y:[0,y1], z:[0,z1],
+              line:{color:'red', width:6}, name:`A (${x1}, ${y1}, ${z1})` },
+
+            { type:'scatter3d', mode:'lines', x:[0,x2], y:[0,y2], z:[0,z2],
+              line:{color:'green', width:6}, name:`B (${x2}, ${y2}, ${z2})` },
+
+            { type:'scatter3d', mode:'lines', x:[0,xs], y:[0,ys], z:[0,zs],
+              line:{color:'blue', width:6}, name:`A+B (${xs}, ${ys}, ${zs})` }
+        ];
+
+        data = data
+            .concat(cuboExtrapolar(x1,y1,z1))
+            .concat(cuboExtrapolar(x2,y2,z2))
+            .concat(cuboExtrapolar(xs,ys,zs));
+
+        const valores = [x1,y1,z1,x2,y2,z2,xs,ys,zs];
+        const min = Math.min(0, ...valores) - 1;
+        const max = Math.max(0, ...valores) + 1;
+
+        Plotly.newPlot('grafico', data, {
+            margin:{l:0,r:0,b:0,t:0},
+            paper_bgcolor:'rgba(0,0,0,0)',
+            scene:{
+                xaxis:{title:'X', color:'#fff', range:[min,max]},
+                yaxis:{title:'Y', color:'#fff', range:[min,max]},
+                zaxis:{title:'Z', color:'#fff', range:[min,max]},
+                aspectmode:'cube'
             }
-            return traces;
-        }
-
-        function graficarVectores(x1, y1, z1, x2, y2, z2) {
-            const xs = x1 + x2, ys = y1 + y2, zs = z1 + z2;
-            const colorCubo = '#fff';
-
-            let data = [
-                // Vector A (rojo)
-                { type: 'scatter3d', mode: 'lines', x: [0, x1], y: [0, y1], z: [0, z1], line: { color: 'red', width: 6 }, name: `A (${x1}, ${y1}, ${z1})` },
-                // Vector B (verde)
-                { type: 'scatter3d', mode: 'lines', x: [0, x2], y: [0, y2], z: [0, z2], line: { color: 'green', width: 6 }, name: `B (${x2}, ${y2}, ${z2})` },
-                // Vector A+B (azul)
-                { type: 'scatter3d', mode: 'lines', x: [0, xs], y: [0, ys], z: [0, zs], line: { color: 'blue', width: 6 }, name: `A+B (${xs}, ${ys}, ${zs})` }
-            ];
-            // Añadir cubos extrapolares para cada vector
-            data = data
-                .concat(cuboExtrapolar(x1, y1, z1, colorCubo, 2))
-                .concat(cuboExtrapolar(x2, y2, z2, colorCubo, 2))
-                .concat(cuboExtrapolar(xs, ys, zs, colorCubo, 2));
-
-            // Rango automático para ejes
-            const valores = [x1, y1, z1, x2, y2, z2, xs, ys, zs];
-            const min = Math.min(0, ...valores) - 1;
-            const max = Math.max(0, ...valores) + 1;
-
-            const layout = {
-                margin: { l: 0, r: 0, b: 0, t: 0 },
-                paper_bgcolor: '#212529',
-                plot_bgcolor: '#212529',
-                font: { color: '#f8f9fa' },
-                scene: {
-                    xaxis: { title: 'X', color: '#fff', range: [min, max] },
-                    yaxis: { title: 'Y', color: '#fff', range: [min, max] },
-                    zaxis: { title: 'Z', color: '#fff', range: [min, max] },
-                    aspectmode: 'cube',
-                    camera: { eye: { x: 1.5, y: 1.5, z: 0.8 } }
-                },
-                legend: { x: 0.85, y: 0.95, font: { color: '#f8f9fa' } }
-            };
-
-            Plotly.newPlot('grafico', data, layout, { displayModeBar: false });
-        }
-
-        document.getElementById('vectorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const x1 = parseFloat(this.x1.value);
-            const y1 = parseFloat(this.y1.value);
-            const z1 = parseFloat(this.z1.value);
-            const x2 = parseFloat(this.x2.value);
-            const y2 = parseFloat(this.y2.value);
-            const z2 = parseFloat(this.z2.value);
-
-            document.getElementById('grafico').classList.remove('d-none');
-            graficarVectores(x1, y1, z1, x2, y2, z2);
         });
-    </script>
+    }
+
+    document.getElementById("vectorForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        graficarVectores(
+            parseFloat(x1.value),
+            parseFloat(y1.value),
+            parseFloat(z1.value),
+            parseFloat(x2.value),
+            parseFloat(y2.value),
+            parseFloat(z2.value)
+        );
+
+        document.getElementById("grafico").classList.remove("d-none");
+    });
+</script>
+
 </body>
 </html>

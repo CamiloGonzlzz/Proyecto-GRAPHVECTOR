@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suma de Vectores R2</title>
-    <!-- Bootstrap Darkly theme from Bootswatch (tema oscuro) -->
+
+    <!-- Bootstrap Darkly -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
-    <!-- Font Awesome para el ícono de suma -->
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
         body {
             background-image: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg');
@@ -15,90 +18,143 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
         }
+
+        h1, h3 {
+            text-shadow: 1px 1px 6px #000;
+        }
+
         .fondo-opaco {
-            background: rgba(0, 0, 0, 0.466);
+            background: rgba(0, 0, 0, 0.68);
             border-radius: 18px;
-            backdrop-filter: blur(2px);
-            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+            backdrop-filter: blur(3px);
+            box-shadow: 0 0 18px rgba(255,255,255,0.25);
             padding: 25px;
         }
-        label {
+
+        .panel-teoria {
+            background: rgba(20, 20, 20, 0.85);
+            border-radius: 18px;
+            padding: 25px;
+            height: 100%;
             color: #fff;
+            box-shadow: 0 0 15px rgba(255,255,255,0.15);
+            border-left: 5px solid #17a2b8;
         }
-        h1 {
-            color: #fff;
-            text-shadow: 1px 1px 8px #000;
+
+        .panel-teoria h3 {
+            margin-bottom: 15px;
+            color: #17d0ff;
         }
+
+        .theory-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 3px solid #17a2b8;
+        }
+
         .img-fluid {
-            border: 4px solid #444;
-            border-radius: 10px;
-            background: #222;
-            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            border: 3px solid #333;
+            background: #111;
+            box-shadow: 0 0 20px rgba(255,255,255,0.35);
         }
-        .suma-icono {
-            font-size: 2rem;
-            color: #ffffff;
-            margin: auto 10px;
-            margin-top: 25px;
-        }
-        .btn-primary {
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-        }
-        .input-group-custom {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .input-group-custom > .form-group {
-            margin-bottom: 0;
-        }
+
     </style>
 </head>
-<body>
-    <div class="container mt-5">
-        <div class="fondo-opaco">
-            <h1 class="mb-4 text-center">Suma de Vectores en R2 (A + B)</h1>
-            <form method="post" class="mb-4">
-                {% csrf_token %}
-                <div class="form-row input-group-custom mb-3">
-                    <div class="form-group col-4">
-                        <label for="x1">X1 (A):</label>
-                        <input type="number" name="x1" id="x1" class="form-control" required>
-                    </div>
-                    <div class="col-1 d-flex align-items-center justify-content-center">
-                        <span class="suma-icono"><i class="fas fa-plus"></i></span>
-                    </div>
-                    <div class="form-group col-4">
-                        <label for="x2">X2 (B):</label>
-                        <input type="number" name="x2" id="x2" class="form-control" required>
-                    </div>
-                </div>
-                <div class="form-row input-group-custom">
-                    <div class="form-group col-4">
-                        <label for="y1">Y1 (A):</label>
-                        <input type="number" name="y1" id="y1" class="form-control" required>
-                    </div>
-                    <div class="col-1 d-flex align-items-center justify-content-center">
-                        <span class="suma-icono"><i class="fas fa-plus"></i></span>
-                    </div>
-                    <div class="form-group col-4">
-                        <label for="y2">Y2 (B):</label>
-                        <input type="number" name="y2" id="y2" class="form-control" required>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center mt-4">
-                    <button type="submit" class="btn btn-primary px-4">Graficar Suma</button>
-                </div>
-            </form>
 
-            {% if imagen %}
-                <div class="mt-4 text-center">
-                    <img src="data:image/png;base64,{{ imagen }}" alt="Gráfico de suma de vectores" class="img-fluid">
-                </div>
-            {% endif %}
+<body>
+<div class="container-fluid mt-4">
+    <div class="row">
+
+        <!-- ========================================= -->
+        <!-- COLUMNA IZQUIERDA: Formulario + Gráfica -->
+        <!-- ========================================= -->
+        <div class="col-md-7">
+            <div class="fondo-opaco">
+                <h1 class="text-center mb-4">Suma de Vectores en R2 (A + B)</h1>
+
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    
+                    <div class="form-row justify-content-center mb-3">
+                        <div class="form-group col-4">
+                            <label>X1 (A):</label>
+                            <input type="number" name="x1" class="form-control" required>
+                        </div>
+
+                        <div class="col-1 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-plus fa-2x text-info"></i>
+                        </div>
+
+                        <div class="form-group col-4">
+                            <label>X2 (B):</label>
+                            <input type="number" name="x2" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-center">
+                        <div class="form-group col-4">
+                            <label>Y1 (A):</label>
+                            <input type="number" name="y1" class="form-control" required>
+                        </div>
+
+                        <div class="col-1 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-plus fa-2x text-info"></i>
+                        </div>
+
+                        <div class="form-group col-4">
+                            <label>Y2 (B):</label>
+                            <input type="number" name="y2" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        <button class="btn btn-primary px-4">Graficar Suma</button>
+                    </div>
+                </form>
+
+                {% if imagen %}
+                    <div class="text-center">
+                        <img src="data:image/png;base64,{{ imagen }}" class="img-fluid">
+                    </div>
+                {% endif %}
+            </div>
         </div>
+
+        <!-- ========================================= -->
+        <!-- COLUMNA DERECHA: Teoría estilizada -->
+        <!-- ========================================= -->
+        <div class="col-md-5">
+            <div class="panel-teoria">
+
+                <h3>📘 Suma de Vectores en R₂</h3>
+
+                <p>
+                    La suma de vectores es una operación fundamental del álgebra vectorial.
+                    Dados dos vectores <b>A</b> y <b>B</b>, su suma produce
+                    un nuevo vector llamado <b>vector resultante</b>.
+                </p>
+
+                <div class="theory-box">
+                    <b>Si:</b><br>
+                    \( A = (x_1, y_1) \)<br>
+                    \( B = (x_2, y_2) \)<br><br>
+
+                    Entonces la suma es:<br>
+                    <h5 class="text-info text-center mt-2">\( R = A + B = (x_1 + x_2,\; y_1 + y_2) \)</h5>
+                </div>
+
+               
+
+            </div>
+        </div>
+
     </div>
+</div>
+
 </body>
 </html>

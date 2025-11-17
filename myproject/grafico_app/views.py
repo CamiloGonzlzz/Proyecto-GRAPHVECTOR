@@ -462,12 +462,14 @@ def suma_vectoresR2(request):
         ax = plt.gca()
         
         # --- Vectores principales ---
-        plt.quiver(0, 0, x1, y1, angles='xy', scale_units='xy', scale=1, 
-                  color='#1f77b4', width=0.012, headwidth=7, headlength=10)
-        plt.quiver(0, 0, x2, y2, angles='xy', scale_units='xy', scale=1, 
-                  color='#2ca02c', width=0.012, headwidth=7, headlength=10)
-        plt.quiver(0, 0, x_sum, y_sum, angles='xy', scale_units='xy', scale=1, 
-                  color='#d62728', width=0.012, headwidth=7, headlength=10)
+        plt.quiver(0, 0, x1, y1, angles='xy', scale_units='xy', scale=1,
+            color='#1f77b4', width=0.009, headwidth=3, headlength=4)
+
+        plt.quiver(0, 0, x2, y2, angles='xy', scale_units='xy', scale=1,
+            color='#2ca02c', width=0.009, headwidth=3, headlength=4)
+
+        plt.quiver(0, 0, x_sum, y_sum, angles='xy', scale_units='xy', scale=1,
+            color='#d62728', width=0.011, headwidth=3.5, headlength=5)
 
         # --- Extrapolares ---
         for x, y, color in [(x1, y1, '#1f77b4'), (x2, y2, '#2ca02c'), (x_sum, y_sum, '#d62728')]:
@@ -559,12 +561,14 @@ def resta_vectoresR2(request):
         ax = plt.gca()
         
         # --- Vectores principales ---
-        plt.quiver(0, 0, x1, y1, angles='xy', scale_units='xy', scale=1, 
-                  color='#1f77b4', width=0.012, headwidth=7, headlength=10)
-        plt.quiver(0, 0, x2, y2, angles='xy', scale_units='xy', scale=1, 
-                  color='#2ca02c', width=0.012, headwidth=7, headlength=10)
-        plt.quiver(0, 0, x_resta, y_resta, angles='xy', scale_units='xy', scale=1, 
-                  color='#d62728', width=0.012, headwidth=7, headlength=10)
+        plt.quiver(0, 0, x1, y1, angles='xy', scale_units='xy', scale=1,
+            color='#1f77b4', width=0.009, headwidth=3, headlength=4)
+
+        plt.quiver(0, 0, x2, y2, angles='xy', scale_units='xy', scale=1,
+            color='#2ca02c', width=0.009, headwidth=3, headlength=4)
+
+        plt.quiver(0, 0, x_resta, y_resta, angles='xy', scale_units='xy', scale=1,
+            color='#d62728', width=0.011, headwidth=3.5, headlength=5)
 
         # --- Extrapolares ---
         for x, y, color in [(x1, y1, '#1f77b4'), (x2, y2, '#2ca02c'), (x_resta, y_resta, '#d62728')]:
@@ -647,10 +651,11 @@ def multiplicacion_vectoresR2(request):
         ax = plt.gca()
         
         # --- Vectores principales ---
-        plt.quiver(0, 0, x1, y1, angles='xy', scale_units='xy', scale=1, 
-                  color='#1f77b4', width=0.012, headwidth=7, headlength=10)
-        plt.quiver(0, 0, x2, y2, angles='xy', scale_units='xy', scale=1, 
-                  color='#2ca02c', width=0.012, headwidth=7, headlength=10)
+        plt.quiver(0, 0, x1, y1, angles='xy', scale_units='xy', scale=1,
+            color='#1f77b4', width=0.009, headwidth=3, headlength=4)
+
+        plt.quiver(0, 0, x2, y2, angles='xy', scale_units='xy', scale=1,
+            color='#2ca02c', width=0.009, headwidth=3, headlength=4)
 
         # --- Extrapolares ---
         for x, y, color in [(x1, y1, '#1f77b4'), (x2, y2, '#2ca02c')]:
