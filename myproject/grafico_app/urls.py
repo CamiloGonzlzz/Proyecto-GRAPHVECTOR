@@ -23,4 +23,6 @@ urlpatterns = [
     path('movimiento-proyectil/', views.Movimiento_Proyectil, name='movimiento_proyectil'),
     path('prueba-regresion/', views.Prueba_Facil_Regresion, name='prueba-regresion'),
     path('prueba-area/', views.Prueba_Facil_Area, name='prueba_area'),
+    path("login/", views.login_view, name="login"),
+    path("registro/", views.registro_view, name="registro"),
 ]

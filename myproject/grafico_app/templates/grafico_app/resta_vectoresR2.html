@@ -5,81 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resta de Vectores R2</title>
 
-    <!-- Bootswatch Darkly -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    //cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+
+    //cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
+        :root {
+            --color-accent: #17a2b8;
+            --color-panel: rgba(0, 0, 0, 0.466);
+            --color-text: #fff;
+            --color-muted: #bbb;
+            --color-input: #444;
+            --color-border: #ccc;
+            --color-shadow: rgba(255, 255, 255, 0.685);
+        }
+
         body {
-            background-image: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg');
+            min-height: 100vh;
+            background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
             background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
         }
 
         .fondo-opaco {
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.466);
             border-radius: 18px;
             backdrop-filter: blur(2px);
-            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.65);
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.685);
             padding: 25px;
         }
 
         .teoria-box {
-            background: rgba(255, 255, 255, 0.08);
-            border-left: 4px solid #17a2b8;
-            padding: 20px;
-            border-radius: 10px;
-            color: #e2e2e2;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.685);
+            padding: 25px;
+            color: #fff;
         }
 
-        h1, h2, label, p {
-            color: #fff;
+        h1, h2, h4, label, p, li, strong {
+            color: #fff !important;
         }
 
         h1 {
-            text-shadow: 1px 1px 8px #000;
+            text-shadow: none;
+            margin-bottom: 1.5rem;
         }
 
-        .resta-icono {
-            font-size: 2rem;
-            color: #fff;
-            margin-top: 25px;
+        h2 {
+            color: var(--color-accent) !important;
+            margin-bottom: 1rem;
         }
 
-        .img-fluid {
-            border: 4px solid #444;
+        .form-control {
+            background: var(--color-input) !important;
+            border: 1px solid var(--color-border) !important;
+            color: #fff !important;
             border-radius: 10px;
-            background: #222;
-            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.6);
+        }
+
+        .form-control:focus {
+            background: var(--color-input) !important;
+            border-color: var(--color-accent) !important;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25) !important;
+            color: #fff !important;
         }
 
         .btn-primary {
-            background-color: #17a2b8;
-            border-color: #17a2b8;
+            background-color: #17a2b8 !important;
+            border-color: #17a2b8 !important;
+            color: #fff !important;
+            border-radius: 10px;
+            padding: 0.65rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #138496 !important;
+            border-color: #138496 !important;
+        }
+
+        .resta-icono {
+            font-size: 1.8rem;
+            color: #17a2b8;
+            margin-top: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-fluid {
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            background: transparent;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            max-height: 420px;
+        }
+
+        .formula-box {
+            background: rgba(34, 34, 34, 0.7);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 1rem 0;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+        }
+
+        ul {
+            padding-left: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .teoria-box {
+                margin-top: 1.5rem;
+            }
+
+            .resta-icono {
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
-
-<div class="container mt-5">
-
+<div class="container mt-5 mb-5">
     <div class="row">
 
-        <!-- ==================== FORMULARIO / CARD PRINCIPAL ==================== -->
-        <div class="col-md-7">
+        <div class="col-md-7 mb-4 mb-md-0">
             <div class="fondo-opaco">
-                <h1 class="text-center mb-4">Resta de Vectores en R2 (A − B)</h1>
+                <h1 class="text-center">Resta de Vectores en R2 (A − B)</h1>
 
                 <form method="post">
                     {% csrf_token %}
 
                     <div class="form-row mb-3">
                         <div class="form-group col-5">
-                            <label for="x1">X1 (A):</label>
+                            abel for="x1">X1 (A):</label>
                             <input type="number" class="form-control" id="x1" name="x1" required>
                         </div>
 
@@ -88,14 +156,14 @@
                         </div>
 
                         <div class="form-group col-5">
-                            <label for="x2">X2 (B):</label>
+                            abel for="x2">X2 (B):</label>
                             <input type="number" class="form-control" id="x2" name="x2" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-5">
-                            <label for="y1">Y1 (A):</label>
+                            abel for="y1">Y1 (A):</label>
                             <input type="number" class="form-control" id="y1" name="y1" required>
                         </div>
 
@@ -104,7 +172,7 @@
                         </div>
 
                         <div class="form-group col-5">
-                            <label for="y2">Y2 (B):</label>
+                            abel for="y2">Y2 (B):</label>
                             <input type="number" class="form-control" id="y2" name="y2" required>
                         </div>
                     </div>
@@ -116,31 +184,31 @@
 
                 {% if imagen %}
                     <div class="mt-4 text-center">
-                        <img src="data:image/png;base64,{{ imagen }}" class="img-fluid"
-                             alt="Gráfico de resta de vectores">
+                        <img src="data:image/png;base64,{{ imagen }}" class="img-fluid" alt="Gráfico de resta de vectores">
                     </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- ==================== TEORÍA (COLUMNA DERECHA) ==================== -->
         <div class="col-md-5">
             <div class="teoria-box">
                 <h2><i class="fas fa-book"></i> Teoría de la Resta de Vectores</h2>
 
                 <p>La resta de vectores en <strong>R²</strong> se define como:</p>
 
-                <p class="text-center">
+                <div class="formula-box text-center">
                     <strong>A − B = (Ax − Bx , Ay − By)</strong>
-                </p>
+                </div>
 
                 <p>Interpretación geométrica:</p>
 
+                <u
+
                 <ul>
-                    <li><strong>Restar un vector equivale a sumar el opuesto del otro.</strong></li>
-                    <li>A − B = A + (−B)</li>
-                    <li>El vector <strong>−B</strong> apunta en la dirección contraria a B.</li>
-                    <li>El resultado es el vector que va desde la punta de B hasta la punta de A.</li>
+                    ><strong>Restar un vector equivale a sumar el opuesto del otro.</strong></l/li>
+                    >A − B = A + (−B)</l/li>
+                    >El vector <strong>−B</strong> apunta en la dirección contraria a B.</l/li>
+                    >El resultado es el vector que va desde la punta de B hasta la punta de A.</li>
                 </ul>
 
                 <p>
@@ -150,7 +218,6 @@
         </div>
 
     </div>
-
 </div>
 
 </body>

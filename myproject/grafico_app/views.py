@@ -7,13 +7,21 @@ import json
 import random
 import numpy as np
 import matplotlib.patches as patches
-from mpl_toolkits.mplot3d import Axes3D  # para gráfico 3D
+from mpl_toolkits.mplot3d import Axes3D 
 import math
 from django.urls import reverse
-import plotly.graph_objects as go
+#import plotly.graph_objects as go
+import requests
+
+
+def login_view(request):
+    return render(request, "grafico_app/login.html")
+
+def registro_view(request):
+    return render(request, "grafico_app/registro.html")
 
 def inicio(request):
-    return render(request, 'grafico_app/Inicio.html')  # Asegúrate de tener este template
+    return render(request, 'grafico_app/Inicio.html') 
 
 def menu(request):
     return render(request, "grafico_app/menu.html")
@@ -1580,3 +1588,4 @@ def Prueba_Facil_Area(request):
         'correctas': correctas,
         'incorrectas': incorrectas
     })
+

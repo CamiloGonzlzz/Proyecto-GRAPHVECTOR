@@ -16,6 +16,7 @@
             background-size: cover;
             font-family: 'Exo 2', sans-serif;
         }
+
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -35,10 +36,8 @@
         }
 
         .main-title {
-            /* ...tus estilos previos... */
             animation: fadeInUp 1.4s cubic-bezier(.23,1.01,.32,1) both;
         }
-
 
         #canvas-container {
             position: fixed;
@@ -48,6 +47,7 @@
             height: 100%;
             z-index: 0;
         }
+
         .hero-section {
             position: absolute;
             top: 50%;
@@ -59,6 +59,7 @@
             max-width: 1000px;
             pointer-events: none;
         }
+
         .main-title {
             font-family: 'Orbitron', sans-serif;
             font-size: clamp(2.5rem, 8vw, 5rem);
@@ -72,6 +73,7 @@
             line-height: 1.1;
             letter-spacing: 2px;
         }
+
         .subtitle {
             color: rgba(255, 255, 255, 0.8);
             font-size: clamp(1rem, 2.5vw, 1.8rem);
@@ -81,6 +83,7 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .cta-button {
             pointer-events: auto;
             background: rgba(0, 219, 222, 0.15);
@@ -100,11 +103,13 @@
             position: relative;
             overflow: hidden;
         }
+
         .cta-button:hover {
             background: rgba(0, 0, 0, 0.582);
             transform: translateY(-5px);
             box-shadow: 0 0 50px rgba(0, 242, 250, 0.808);
         }
+
         .cta-button::before {
             content: '';
             position: absolute;
@@ -115,9 +120,11 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: 0.5s;
         }
+
         .cta-button:hover::before {
             left: 100%;
         }
+
         .fractal-info {
             position: absolute;
             bottom: 30px;
@@ -129,6 +136,7 @@
             text-align: center;
             width: 100%;
         }
+
         .fractal-controls {
             position: absolute;
             bottom: 80px;
@@ -138,6 +146,7 @@
             display: flex;
             gap: 15px;
         }
+
         .control-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -148,9 +157,11 @@
             font-family: 'Exo 2', sans-serif;
             transition: all 0.3s ease;
         }
+
         .control-btn:hover {
             background: rgba(0, 219, 222, 0.3);
         }
+
         .math-formula {
             position: absolute;
             color: rgba(255, 255, 255, 0.7);
@@ -162,6 +173,7 @@
             opacity: 0;
             animation: floatIn 15s infinite ease-in-out;
         }
+
         @keyframes floatIn {
             0%, 100% { transform: translateY(50px) rotate(5deg); opacity: 0; }
             10%, 90% { opacity: 0.8; }
@@ -171,34 +183,26 @@
 </head>
 <body>
     <div id="canvas-container"></div>
-    
+
     <div class="hero-section">
         <h1 class="main-title">VECTOR GRAPH 2.0</h1>
         <button class="cta-button" id="exploreBtn">INICIAR EXPERIENCIA</button>
     </div>
 
-    
     <script>
         const menuUrl = "{% url 'menu' %}";
-        
-        // Interacción con el mouse
+
         const mouse = new THREE.Vector2();
-        
-       
-    // Botón de interacción
-    document.getElementById('exploreBtn').addEventListener('click', function() {
-        this.textContent = "EXPLORANDO...";
-        this.style.background = "rgba(0, 0, 0, 0.582";
-        this.style.borderColor = "rgba(85, 0, 222, 0.5)";
-        
 
-        // Redirigir después de 2 segundos (cuando termina la animación de la cámara)
-        setTimeout(function() {
-            window.location.href = menuUrl;
-        }, 2000);
+        document.getElementById('exploreBtn').addEventListener('click', function() {
+            this.textContent = "EXPLORANDO...";
+            this.style.background = "rgba(0, 0, 0, 0.582)";
+            this.style.borderColor = "rgba(85, 0, 222, 0.5)";
 
-    });
-
+            setTimeout(function() {
+                window.location.href = menuUrl;
+            }, 2000);
+        });
     </script>
 </body>
 </html>

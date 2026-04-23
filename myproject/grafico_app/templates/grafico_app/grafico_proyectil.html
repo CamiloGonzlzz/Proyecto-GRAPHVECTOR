@@ -3,32 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Visualizador de Vector 3D - Proyectil</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
         body {
             min-height: 100vh;
             background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
             background-size: cover;
         }
+
         .bg-dark-blur {
             background: rgba(0, 0, 0, 0.466);
             border-radius: 18px;
             backdrop-filter: blur(2px);
             box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
         }
-        #grafico {
-            width: 100%;
-            height: 600px;
-            display: none;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.7);
-            margin-top: 1rem;
-            padding: 1rem;
-        }
+
         label, .form-label, .form-control, .btn {
             color: #fff !important;
         }
+
         .form-control {
             background: #444 !important;
             border: 1px solid #ccc !important;
@@ -43,46 +39,139 @@
             background-color: #17a2b8;
             border-color: #17a2b8;
         }
+
+        .explanation {
+            height: calc(100vh - 3.5rem);
+            overflow-y: auto;
+            position: sticky;
+            top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.466);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+            color: #fff;
+        }
+
+        .explanation h4 {
+            color: #17a2b8;
+            margin-bottom: 1rem;
+        }
+
+        .math-block {
+            background: #222;
+            padding: 0.75rem;
+            border-radius: 8px;
+            color: #aaffff;
+            margin-bottom: 10px;
+        }
+
+        #grafico {
+            display: none;
+            width: 100%;
+            height: 550px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.7);
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+
         @media (max-width: 600px) {
             #grafico { height: 350px; }
         }
+
+        img {
+            background: transparent;
+        }
     </style>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body class="text-light">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8 col-12">
-                <div class="bg-dark-blur p-4 mb-4">
-                    <h2 class="mb-3 text-center">Visualizador de Vector 3D - Proyectil</h2>
-                    <form method="post" id="vectorForm" autocomplete="off" class="row g-3">
-                        {% csrf_token %}
-                        <div class="col-12 col-md-4">
-                            <label for="inputV0" class="form-label">Velocidad Inicial (m/s)</label>
-                            <input type="number" class="form-control" id="inputV0" required>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <label for="inputAngXY" class="form-label">Ángulo XY (°)</label>
-                            <input type="number" class="form-control" id="inputAngXY" required>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <label for="inputAngZ" class="form-label">Ángulo Z (°)</label>
-                            <input type="number" class="form-control" id="inputAngZ" required>
-                        </div>
-                        <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-primary px-5 mt-2">Graficar</button>
-                        </div>
-                    </form>
+
+<div class="container-fluid py-5">
+    <div class="row gx-2">
+
+        <!-- COLUMNA IZQUIERDA: FORMULARIO + GRÁFICA -->
+        <div class="col-lg-8 col-md-12">
+
+            <div class="bg-dark-blur p-4 mb-4">
+                <h2 class="mb-3 text-center">Visualizador de Vector 3D - Proyectil</h2>
+
+                <form method="post" id="vectorForm" autocomplete="off" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-12 col-md-4">
+                        <label for="inputV0" class="form-label">Velocidad Inicial (m/s)</label>
+                        <input type="number" class="form-control" id="inputV0" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="inputAngXY" class="form-label">Ángulo XY (°)</label>
+                        <input type="number" class="form-control" id="inputAngXY" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="inputAngZ" class="form-label">Ángulo Z (°)</label>
+                        <input type="number" class="form-control" id="inputAngZ" required>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary px-5 mt-2">Graficar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="grafico"></div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: TEORÍA -->
+        <div class="col-lg-4 col-md-12">
+            <div class="explanation">
+
+                <h4>Conceptos: Vector 3D y Proyectil</h4>
+
+                <p>Un vector en \( \mathbb{R}^3 \) se representa como:</p>
+                <div class="math-block">
+                    $$ \vec{v} = (v_x,\, v_y,\, v_z) $$
                 </div>
-                <div id="grafico"></div>
+
+                <p>Las componentes según los ángulos son:</p>
+                <div class="math-block">
+                    $$ v_x = v_0 \cos(\theta_Z)\cos(\theta_{XY}) $$
+                    $$ v_y = v_0 \cos(\theta_Z)\sin(\theta_{XY}) $$
+                    $$ v_z = v_0 \sin(\theta_Z) $$
+                </div>
+
+                <p>La magnitud del vector velocidad es:</p>
+                <div class="math-block">
+                    $$ |\vec{v}| = \sqrt{v_x^2 + v_y^2 + v_z^2} $$
+                </div>
+
+                <p>Con resistencia del aire, las aceleraciones son:</p>
+                <div class="math-block">
+                    $$ a_x = -k\,v_x $$
+                    $$ a_y = -k\,v_y $$
+                    $$ a_z = -g - k\,v_z $$
+                </div>
+
+                <p>La posición se actualiza numéricamente con paso \( \Delta t \):</p>
+                <div class="math-block">
+                    $$ x_{n+1} = x_n + v_x\,\Delta t $$
+                    $$ z_{n+1} = z_n + v_z\,\Delta t $$
+                </div>
+
+                <p>El vector unitario de velocidad indica la dirección del movimiento:</p>
+                <div class="math-block">
+                    $$ \hat{v} = \frac{\vec{v}}{|\vec{v}|} $$
+                </div>
+
+                <p>Los vectores en verde representan la <strong>velocidad</strong> y los azules la <strong>aceleración</strong> a lo largo de la trayectoria.</p>
+
             </div>
         </div>
+
     </div>
+</div>
 
 <script>
 function proyectilConResistencia(v0, angXY, angZ, dt = 0.05, k = 0.1, g = 9.8) {
     const radXY = angXY * Math.PI / 180;
-    const radZ = angZ * Math.PI / 180;
+    const radZ  = angZ  * Math.PI / 180;
 
     let vx = v0 * Math.cos(radZ) * Math.cos(radXY);
     let vy = v0 * Math.cos(radZ) * Math.sin(radXY);
@@ -92,34 +181,34 @@ function proyectilConResistencia(v0, angXY, angZ, dt = 0.05, k = 0.1, g = 9.8) {
     let vxArr = [vx], vyArr = [vy], vzArr = [vz];
     let axArr = [], ayArr = [], azArr = [];
 
-    let x=0, y=0, z=0;
-    while(z >= 0) {
-        let ax = -k*vx;
-        let ay = -k*vy;
-        let az = -g - k*vz;
+    let x = 0, y = 0, z = 0;
+    while (z >= 0) {
+        let ax = -k * vx;
+        let ay = -k * vy;
+        let az = -g - k * vz;
 
         axArr.push(ax); ayArr.push(ay); azArr.push(az);
 
-        vx += ax*dt;
-        vy += ay*dt;
-        vz += az*dt;
+        vx += ax * dt;
+        vy += ay * dt;
+        vz += az * dt;
 
         vxArr.push(vx); vyArr.push(vy); vzArr.push(vz);
 
-        x += vx*dt;
-        y += vy*dt;
-        z += vz*dt;
+        x += vx * dt;
+        y += vy * dt;
+        z += vz * dt;
 
         xArr.push(x); yArr.push(y); zArr.push(z);
     }
 
-    return {xArr, yArr, zArr, vxArr, vyArr, vzArr, axArr, ayArr, azArr};
+    return { xArr, yArr, zArr, vxArr, vyArr, vzArr, axArr, ayArr, azArr };
 }
 
 function graficarProyectil() {
-    const v0 = parseFloat(document.getElementById('inputV0').value);
+    const v0    = parseFloat(document.getElementById('inputV0').value);
     const angXY = parseFloat(document.getElementById('inputAngXY').value);
-    const angZ = parseFloat(document.getElementById('inputAngZ').value);
+    const angZ  = parseFloat(document.getElementById('inputAngZ').value);
 
     const datos = proyectilConResistencia(v0, angXY, angZ);
 
@@ -127,53 +216,58 @@ function graficarProyectil() {
         type: 'scatter3d',
         mode: 'lines+markers',
         x: datos.xArr, y: datos.yArr, z: datos.zArr,
-        line: { color:'#ff5555', width:4 },
+        line: { color: '#ff5555', width: 4 },
         name: 'Trayectoria'
     };
 
     let velVectores = [];
-    for(let i=0; i<datos.xArr.length; i+=10){
+    for (let i = 0; i < datos.xArr.length; i += 10) {
         velVectores.push({
-            type:'scatter3d',
-            mode:'lines',
-            x:[datos.xArr[i], datos.xArr[i]+datos.vxArr[i]*0.5],
-            y:[datos.yArr[i], datos.yArr[i]+datos.vyArr[i]*0.5],
-            z:[datos.zArr[i], datos.zArr[i]+datos.vzArr[i]*0.5],
-            line:{color:'#00ff00', width:3},
-            name:'Velocidad'
+            type: 'scatter3d', mode: 'lines',
+            x: [datos.xArr[i], datos.xArr[i] + datos.vxArr[i] * 0.5],
+            y: [datos.yArr[i], datos.yArr[i] + datos.vyArr[i] * 0.5],
+            z: [datos.zArr[i], datos.zArr[i] + datos.vzArr[i] * 0.5],
+            line: { color: '#00ff00', width: 3 },
+            name: 'Velocidad'
         });
     }
 
     let accVectores = [];
-    for(let i=0; i<datos.xArr.length; i+=10){
+    for (let i = 0; i < datos.xArr.length; i += 10) {
         accVectores.push({
-            type:'scatter3d',
-            mode:'lines',
-            x:[datos.xArr[i], datos.xArr[i]+datos.axArr[i]*0.5],
-            y:[datos.yArr[i], datos.yArr[i]+datos.ayArr[i]*0.5],
-            z:[datos.zArr[i], datos.zArr[i]+datos.azArr[i]*0.5],
-            line:{color:'#0000ff', width:3},
-            name:'Aceleración'
+            type: 'scatter3d', mode: 'lines',
+            x: [datos.xArr[i], datos.xArr[i] + datos.axArr[i] * 0.5],
+            y: [datos.yArr[i], datos.yArr[i] + datos.ayArr[i] * 0.5],
+            z: [datos.zArr[i], datos.zArr[i] + datos.azArr[i] * 0.5],
+            line: { color: '#0000ff', width: 3 },
+            name: 'Aceleración'
         });
     }
 
     const layout = {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
         scene: {
-            xaxis: {title:'X'},
-            yaxis: {title:'Y'},
-            zaxis: {title:'Z'}
+            xaxis: { title: 'X', color: '#fff' },
+            yaxis: { title: 'Y', color: '#fff' },
+            zaxis: { title: 'Z', color: '#fff' }
         },
-        margin: {l:0, r:0, b:0, t:0}
+        font: { color: '#fff' },
+        margin: { l: 0, r: 0, b: 0, t: 0 }
     };
 
-    document.getElementById('grafico').style.display = 'block';
-    Plotly.newPlot('grafico', [tray, ...velVectores, ...accVectores], layout, {responsive:true});
+    const grafico = document.getElementById('grafico');
+    grafico.style.display = 'block';
+    grafico.classList.add('bg-dark-blur');
+
+    Plotly.newPlot('grafico', [tray, ...velVectores, ...accVectores], layout, { responsive: true });
 }
 
-document.getElementById('vectorForm').addEventListener('submit', function(e){
+document.getElementById('vectorForm').addEventListener('submit', function (e) {
     e.preventDefault();
     graficarProyectil();
 });
 </script>
+
 </body>
 </html>

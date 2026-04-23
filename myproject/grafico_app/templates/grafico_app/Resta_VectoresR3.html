@@ -3,20 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resta de Vectores R3</title>
+    <title>Resta de Vectores R3</titltle>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    //cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheetet">
+    //cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <style>
+        :root {
+            --color-accent: #17a2b8;
+            --color-panel: rgba(0, 0, 0, 0.466);
+            --color-panel-strong: rgba(0, 0, 0, 0.62);
+            --color-input: #444;
+            --color-border: #ccc;
+            --color-text: #fff;
+            --color-muted: #bbb;
+            --color-shadow: rgba(255, 255, 255, 0.685);
+        }
+
         body {
             min-height: 100vh;
             background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
             background-size: cover;
+            color: var(--color-text);
         }
 
-        /* Contenedor general con 2 columnas */
         .layout {
             display: grid;
             grid-template-columns: 1fr 350px;
@@ -26,53 +37,151 @@
             margin: 30px auto;
         }
 
-        /* Columna izquierda (inputs + gráfica) */
         .contenido {
-            background: rgba(0, 0, 0, 0.5);
+            background: var(--color-panel);
             border-radius: 18px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px var(--color-shadow);
             backdrop-filter: blur(2px);
         }
 
-        /* Columna derecha (teoría) */
         .teoria {
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.466);
             border-radius: 18px;
-            padding: 20px;
-            color: #e2e8f0;
-            height: 100%;
-            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.25);
+            padding: 1.5rem;
+            color: #fff;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.685);
             overflow-y: auto;
-            max-height: 90vh;
+            max-height: calc(100vh - 60px);
+            position: sticky;
+            top: 30px;
         }
 
         .teoria h3 {
             text-align: center;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
+            color: var(--color-accent);
+        }
+
+        .teoria p,
+        .teoria li,
+        .teoria strong {
             color: #fff;
         }
 
-        #grafico {
-            width: 100%;
-            height: 600px;
+        .formula-box {
+            background: #222;
+            padding: 0.75rem;
             border-radius: 8px;
-            margin-top: 18px;
+            color: #aaffff;
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
+            font-size: 1.05rem;
+        }
+
+        #grafico {
+            display: none;
+            width: 100%;
+            height: 550px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.7);
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+
+        h1,
+        .vector-title,
+        label,
+        p,
+        li,
+        span {
+            color: #fff !important;
+        }
+
+        .vector-title {
+            font-weight: 600;
+            font-size: 1.05rem;
         }
 
         .info-box {
-            background: rgba(13, 110, 253, 0.15);
-            color: #dbeafe;
-            padding: 12px;
-            border-radius: 6px;
+            background: rgba(34, 34, 34, 0.75);
+            color: #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
             margin-bottom: 18px;
-            border-left: 5px solid #0d6efd;
+            border-left: 4px solid var(--color-accent);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
         }
 
-        .form-label { color: #adb5bd; font-weight: 500; margin-bottom: 4px; }
-        .form-control { max-width: 170px; font-size: 1.2rem; padding: 10px; }
+        .form-label {
+            color: #fff !important;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
 
+        .form-control {
+            max-width: 170px;
+            font-size: 1.1rem;
+            padding: 10px;
+            background: var(--color-input) !important;
+            border: 1px solid var(--color-border) !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .form-control:focus {
+            background: var(--color-input) !important;
+            color: #fff !important;
+            border-color: var(--color-accent) !important;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            border-radius: 10px;
+            padding: 0.7rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #138496;
+            border-color: #138496;
+        }
+
+        .input-group-icon {
+            color: var(--color-accent);
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        @media (max-width: 991.98px) {
+            .layout {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+
+            .teoria {
+                position: static;
+                max-height: none;
+            }
+
+            #grafico {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #grafico {
+                height: 350px;
+            }
+
+            .form-control {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -99,14 +208,14 @@
             <!-- X -->
             <div class="row align-items-center mb-2 gx-1 justify-content-center">
                 <div class="col-5 d-flex flex-column align-items-center">
-                    <label for="x1" class="form-label">X<sub>A</sub></label>
+                    abel for="x1" class="form-label">X<sub>A</sub></label>
                     <input type="number" step="0.1" id="x1" class="form-control text-center" required>
                 </div>
                 <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
                     <span class="input-group-icon"><i class="bi bi-dash"></i></span>
                 </div>
                 <div class="col-5 d-flex flex-column align-items-center">
-                    <label for="x2" class="form-label">X<sub>B</sub></label>
+                    abel for="x2" class="form-label">X<sub>B</sub></label>
                     <input type="number" step="0.1" id="x2" class="form-control text-center" required>
                 </div>
             </div>
@@ -114,14 +223,14 @@
             <!-- Y -->
             <div class="row align-items-center mb-2 gx-1 justify-content-center">
                 <div class="col-5 d-flex flex-column align-items-center">
-                    <label for="y1" class="form-label">Y<sub>A</sub></label>
+                    abel for="y1" class="form-label">Y<sub>A</sub></label>
                     <input type="number" step="0.1" id="y1" class="form-control text-center" required>
                 </div>
                 <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
                     <span class="input-group-icon"><i class="bi bi-dash"></i></span>
                 </div>
                 <div class="col-5 d-flex flex-column align-items-center">
-                    <label for="y2" class="form-label">Y<sub>B</sub></label>
+                    abel for="y2" class="form-label">Y<sub>B</sub></label>
                     <input type="number" step="0.1" id="y2" class="form-control text-center" required>
                 </div>
             </div>
@@ -129,14 +238,14 @@
             <!-- Z -->
             <div class="row align-items-center mb-4 gx-1 justify-content-center">
                 <div class="col-5 d-flex flex-column align-items-center">
-                    <label for="z1" class="form-label">Z<sub>A</sub></label>
+                    abel for="z1" class="form-label">Z<sub>A</sub></label>
                     <input type="number" step="0.1" id="z1" class="form-control text-center" required>
                 </div>
                 <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
                     <span class="input-group-icon"><i class="bi bi-dash"></i></span>
                 </div>
                 <div class="col-5 d-flex flex-column align-items-center">
-                    <label for="z2" class="form-label">Z<sub>B</sub></label>
+                    abel for="z2" class="form-label">Z<sub>B</sub></label>
                     <input type="number" step="0.1" id="z2" class="form-control text-center" required>
                 </div>
             </div>
@@ -155,16 +264,16 @@
 
         <p>La <strong>resta de vectores</strong> en R³ se define como:</p>
 
-        <pre style="color:#aaf; font-size:1.1rem;">
+        <div class="formula-box">
 A − B = (Ax − Bx , Ay − By , Az − Bz)
-        </pre>
+        </div>
 
         <p>Geométricamente, la resta puede interpretarse como:</p>
 
         <ul>
-            <li>Sumar A con el inverso de B.</li>
-            <li>Construir un paralepípedo usando ambos vectores.</li>
-            <li>Usar la ley del triángulo invertido.</li>
+            >Sumar A con el inverso de B.</l/li>
+            >Construir un paralepípedo usando ambos vectores.</l/li>
+            >Usar la ley del triángulo invertido.</li>
         </ul>
 
         <p>El resultado indica hacia dónde apunta el vector que va desde el final de B hasta el final de A.</p>
@@ -172,18 +281,14 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
         <p>Esta gráfica muestra:</p>
 
         <ul>
-            <li><span style="color:red;">Vector A</span></li>
-            <li><span style="color:lime;">Vector B</span></li>
-            <li><span style="color:deepskyblue;">Vector A − B</span></li>
-            <li>Cubos extrapolares para cada vector</li>
+            ><span style="color:red;">Vector A</span></l/li>
+            ><span style="color:lime;">Vector B</span></l/li>
+            ><span style="color:deepskyblue;">Vector A − B</span></l/li>
+            >Cubos extrapolares para cada vector</li>
         </ul>
-
     </div>
 
 </div>
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -262,6 +367,7 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
         const z2 = parseFloat(this.z2.value);
 
         document.getElementById('grafico').classList.remove('d-none');
+        document.getElementById('grafico').style.display = 'block';
         graficarVectores(x1, y1, z1, x2, y2, z2);
     });
 </script>

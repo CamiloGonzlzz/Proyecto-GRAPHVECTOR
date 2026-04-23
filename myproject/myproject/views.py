@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import io
 import base64
 
-def home(request):  # primera vista
+def home(request): 
 
     doc_externo = open("C:/Users/LENOVO/Documents/ProyectoDjango/myproject/myproject/Plantillas/Home.html")
     plt = Template(doc_externo.read())

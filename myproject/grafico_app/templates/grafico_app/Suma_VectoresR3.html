@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suma de Vectores R3</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    //cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos Bootstrap -->
+    //cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <style>
@@ -13,106 +18,166 @@
             min-height: 100vh;
             background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
             background-size: cover;
+            color: #fff;
         }
+
         .bg-dark-blur {
             background: rgba(0, 0, 0, 0.466);
             border-radius: 18px;
             backdrop-filter: blur(2px);
-            box-shadow: 0 8px 32px rgba(255,255,255,0.6);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
         }
-        #grafico {
-            width: 100%;
-            height: 600px;
-            border-radius: 8px;
-            margin-top: 18px;
+
+        .teoria-panel {
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
+            color: #fff;
         }
+
         .teoria-box {
-            background: rgba(255,255,255,0.08);
-            border-left: 6px solid #17a2b8;
-            padding: 18px;
+            background: #222;
+            padding: 1rem;
             border-radius: 12px;
             color: #e2e6ea;
+            margin-top: 0.75rem;
         }
+
         .teoria-box h3 {
             color: #17a2b8;
+            margin-bottom: 0.75rem;
         }
+
+        .info-box {
+            background: rgba(13, 110, 253, 0.12);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #0d6efd;
+            color: #e2e6ea;
+            font-size: 0.95rem;
+        }
+
+        label, .form-label {
+            color: #fff;
+        }
+
         .form-control {
-            font-size: 1.1rem;
+            background: #444 !important;
+            border: 1px solid #ccc !important;
+            color: #fff !important;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        .form-control::placeholder {
+            color: #bbb !important;
+        }
+
+        .form-control:focus {
+            background: #444 !important;
+            color: #fff !important;
+            border-color: #17a2b8 !important;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.35) !important;
+        }
+
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            border-radius: 10px;
+            font-weight: 600;
+            padding-inline: 1.5rem;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #138496;
+            border-color: #138496;
+        }
+
+        #grafico {
+            width: 100%;
+            height: 550px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            margin-top: 1rem;
+            padding: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            #grafico { height: 350px; }
         }
     </style>
 </head>
 
 <body>
-
 <div class="container py-4">
     <div class="row g-4">
 
         <!-- COLUMNA IZQUIERDA (Formulario + gráfico) -->
-        <div class="col-lg-8">
+        <div class="col-lg-8 col-md-12">
             <div class="bg-dark-blur p-4">
 
-                <h1 class="text-center mb-3">Suma de Vectores en R³</h1>
+                <h2 class="text-center mb-3">Suma de Vectores en R³</h2>
 
-                <div class="info-box mb-3" style="
-                    background: rgba(13, 110, 253, 0.15);
-                    padding:12px;border-radius:6px;border-left:5px solid #0d6efd;">
+                <div class="info-box mb-3">
                     <strong>Nota:</strong> La suma A + B se calcula sumando cada componente correspondiente.
                 </div>
 
                 <form id="vectorForm" autocomplete="off">
                     <div class="row text-center mb-2">
-                        <div class="col-5 vector-title">Vector A</div>
+                        <div class="col-5 fw-semibold">Vector A</div>
                         <div class="col-2"></div>
-                        <div class="col-5 vector-title">Vector B</div>
+                        <div class="col-5 fw-semibold">Vector B</div>
                     </div>
 
                     <!-- X -->
                     <div class="row mb-2 justify-content-center align-items-center">
-                        <div class="col-5 text-center">
-                            <label class="form-label">X<sub>A</sub></label>
+                        <div class="col-5 text-center mb-2 mb-sm-0">
+                            abel class="form-label">X<sub>A</sub></label>
                             <input type="number" step="0.1" id="x1" class="form-control text-center" required>
                         </div>
-                        <div class="col-2 text-center">
-                            <i class="bi bi-plus fs-2"></i>
+                        <div class="col-2 text-center mb-2 mb-sm-0">
+                            <i class="bi bi-plus fs-2 text-info"></i>
                         </div>
-                        <div class="col-5 text-center">
-                            <label class="form-label">X<sub>B</sub></label>
+                        <div class="col-5 text-center mb-2 mb-sm-0">
+                            abel class="form-label">X<sub>B</sub></label>
                             <input type="number" step="0.1" id="x2" class="form-control text-center" required>
                         </div>
                     </div>
 
                     <!-- Y -->
                     <div class="row mb-2 justify-content-center align-items-center">
-                        <div class="col-5 text-center">
-                            <label class="form-label">Y<sub>A</sub></label>
+                        <div class="col-5 text-center mb-2 mb-sm-0">
+                            abel class="form-label">Y<sub>A</sub></label>
                             <input type="number" step="0.1" id="y1" class="form-control text-center" required>
                         </div>
-                        <div class="col-2 text-center">
-                            <i class="bi bi-plus fs-2"></i>
+                        <div class="col-2 text-center mb-2 mb-sm-0">
+                            <i class="bi bi-plus fs-2 text-info"></i>
                         </div>
-                        <div class="col-5 text-center">
-                            <label class="form-label">Y<sub>B</sub></label>
+                        <div class="col-5 text-center mb-2 mb-sm-0">
+                            abel class="form-label">Y<sub>B</sub></label>
                             <input type="number" step="0.1" id="y2" class="form-control text-center" required>
                         </div>
                     </div>
 
                     <!-- Z -->
                     <div class="row mb-4 justify-content-center align-items-center">
-                        <div class="col-5 text-center">
-                            <label class="form-label">Z<sub>A</sub></label>
+                        <div class="col-5 text-center mb-2 mb-sm-0">
+                            abel class="form-label">Z<sub>A</sub></label>
                             <input type="number" step="0.1" id="z1" class="form-control text-center" required>
                         </div>
-                        <div class="col-2 text-center">
-                            <i class="bi bi-plus fs-2"></i>
+                        <div class="col-2 text-center mb-2 mb-sm-0">
+                            <i class="bi bi-plus fs-2 text-info"></i>
                         </div>
-                        <div class="col-5 text-center">
-                            <label class="form-label">Z<sub>B</sub></label>
+                        <div class="col-5 text-center mb-2 mb-sm-0">
+                            abel class="form-label">Z<sub>B</sub></label>
                             <input type="number" step="0.1" id="z2" class="form-control text-center" required>
                         </div>
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary px-4">Calcular Suma (A + B)</button>
+                        <button type="submit" class="btn btn-primary">Calcular Suma (A + B)</button>
                     </div>
                 </form>
 
@@ -121,29 +186,37 @@
         </div>
 
         <!-- COLUMNA DERECHA (TEORÍA) -->
-        <div class="col-lg-4">
-            <div class="teoria-box">
-                <h3>📘 Teoría: Suma de vectores en R³</h3>
+        <div class="col-lg-4 col-md-12">
+            <div class="teoria-panel">
+                <h4 class="mb-3">📘 Teoría: Suma de vectores en R³</h4>
+
                 <p>
                     La suma de dos vectores en el espacio tridimensional R³ se realiza sumando
                     cada componente correspondiente:
                 </p>
 
-                <p class="text-center fs-5">
-                    <strong>A = (x₁, y₁, z₁)</strong><br>
-                    <strong>B = (x₂, y₂, z₂)</strong>
+                <div class="teoria-box">
+                    <p class="text-center fs-6 mb-2">
+                        <strong>A = (x₁, y₁, z₁)</strong><br>
+                        <strong>B = (x₂, y₂, z₂)</strong>
+                    </p>
+
+                    <p class="text-center fs-6 mb-0">
+                        <strong>A + B = (x₁ + x₂, y₁ + y₂, z₁ + z₂)</strong>
+                    </p>
+                </div>
+
+                <p class="mt-3">
+                    Geométricamente, la suma de vectores se interpreta usando la ley del
+                    paralelogramo o “cabeza con cola”.
                 </p>
 
-                <p class="text-center fs-5">
-                    <strong>A + B = (x₁ + x₂, y₁ + y₂, z₁ + z₂)</strong>
-                </p>
-
-                <p>Geométricamente, la suma de vectores se interpreta usando la ley del paralelogramo o “cabeza con cola”.</p>
+                <u
 
                 <ul>
-                    <li>El vector A se dibuja desde el origen.</li>
-                    <li>El vector B también se dibuja desde el origen.</li>
-                    <li>El vector suma A+B es la diagonal del paralelogramo formado.</li>
+                    >El vector A se dibuja desde el origen.</l/li>
+                    >El vector B también se dibuja desde el origen.</l/li>
+                    >El vector suma A+B es la diagonal del paralelogramo formado.</li>
                 </ul>
 
                 <p>Esta visualización es muy útil en física para fuerzas, desplazamientos y campos.</p>

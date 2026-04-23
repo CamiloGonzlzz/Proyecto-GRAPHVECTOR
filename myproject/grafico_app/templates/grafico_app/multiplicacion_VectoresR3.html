@@ -1,82 +1,124 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplicación de Vectores R3</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
         body {
             min-height: 100vh;
             background: url('https://wallpapers.com/images/hd/dark-elegant-pattern-y67f2aqpg0m7abe1.jpg') no-repeat center center fixed;
             background-size: cover;
         }
-        .page {
-            max-width: 1200px;
-            margin: 32px auto;
-            padding: 20px;
+
+        .bg-dark-blur {
+            background: rgba(0, 0, 0, 0.466);
+            border-radius: 18px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
         }
-        .card-surface {
-            background: rgba(0,0,0,0.50);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+
+        label, .form-label, .form-control, .btn {
+            color: #fff !important;
+        }
+
+        .form-control {
+            background: #444 !important;
+            border: 1px solid #ccc !important;
+            color: #fff !important;
+            text-align: center;
+        }
+
+        .form-control::placeholder {
+            color: #bbb !important;
+        }
+
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .explanation {
+            height: calc(100vh - 3.5rem);
+            overflow-y: auto;
+            position: sticky;
+            top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.466);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.685);
             color: #fff;
         }
-        h1 { color: #fff; text-align: center; margin-bottom: 18px; }
-        .info-box {
-            background: rgba(13,110,253,0.12);
-            color: #dbeafe;
+
+        .explanation h4 {
+            color: #17a2b8;
+            margin-bottom: 1rem;
+        }
+
+        .math-block {
+            background: #222;
+            padding: 0.75rem;
+            border-radius: 8px;
+            color: #aaffff;
+            margin-bottom: 10px;
+        }
+
+        .vector-title {
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .input-group-icon {
+            font-size: 1.6rem;
+            color: #fff;
+        }
+
+        .results {
+            background: #212529;
+            color: #d1e7dd;
             padding: 12px;
             border-radius: 8px;
-            margin-bottom: 18px;
-            border-left: 4px solid #0d6efd;
+            border-left: 4px solid #4CAF50;
+            margin-top: 1rem;
         }
-        .form-label { color: #adb5bd; font-weight: 500; margin-bottom: 6px; }
-        .form-control { max-width: 170px; min-width:120px; font-size:1.05rem; padding:10px 12px; text-align:center; }
-        .vector-title { font-weight:700; color:#fff; margin-bottom:10px; text-align:center; }
-        .input-group-icon { font-size:1.6rem; color:#fff; }
-        .btn-primary { background-color: #17a2b8; border-color: #17a2b8; }
-        #grafico { width:100%; height:600px; border-radius:8px; margin-top:16px; background: transparent; }
-        .results { background:#212529; color:#d1e7dd; padding:12px; border-radius:8px; border-left:4px solid #4CAF50; }
-        .theory-panel {
-            background: rgba(0,0,0,0.55);
+
+        #grafico {
+            width: 100%;
+            height: 550px;
             border-radius: 12px;
-            padding: 18px;
-            color: #e6eef6;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.45);
-            height: 100%;
-            overflow-y: auto;
+            margin-top: 1rem;
         }
-        pre.formula { background: rgba(255,255,255,0.03); padding:10px; border-radius:8px; color:#aef; }
+
         @media (max-width: 991.98px) {
             #grafico { height: 420px; }
         }
+
         @media (max-width: 767.98px) {
-            .form-control { max-width:100%; min-width: auto; }
+            .form-control { max-width: 100%; min-width: auto; }
         }
     </style>
 </head>
-<body>
-<div class="page">
+<body class="text-light">
 
-    <div class="row g-4">
-        <!-- IZQUIERDA: formulario + resultados + gráfica -->
-        <div class="col-lg-8">
-            <div class="card-surface">
-                <h1>Multiplicación de Vectores en R³</h1>
+<div class="container-fluid py-5">
+    <div class="row gx-2">
 
-                <div class="info-box">
-                    <strong>Información:</strong>
-                    <ul class="mb-0">
-                        <li><strong>Producto Escalar (A·B):</strong> Número que mide la magnitud y dirección relativa</li>
-                        <li><strong>Producto Vectorial (A×B):</strong> Vector perpendicular a A y B</li>
-                    </ul>
-                </div>
+        <!-- COLUMNA IZQUIERDA: FORMULARIO + RESULTADOS + GRÁFICA -->
+        <div class="col-lg-8 col-md-12">
+            <div class="bg-dark-blur p-4 mb-4">
+
+                <h2 class="text-center mb-4">Multiplicación de Vectores en R³</h2>
 
                 <form id="vectorForm" class="mb-3" autocomplete="off">
+
                     <div class="row text-center mb-2">
                         <div class="col-5 vector-title">Vector A</div>
                         <div class="col-2"></div>
@@ -129,64 +171,69 @@
                     </div>
 
                     <div class="text-center mb-2">
-                        <button type="submit" id="calcularBtn" class="btn btn-primary px-4">Calcular Productos</button>
+                        <button type="submit" class="btn btn-primary px-5">Calcular Productos</button>
                     </div>
                 </form>
 
                 <div id="resultados" class="results d-none"></div>
-
-                <!-- Gráfica (id intacto) -->
-                <div id="grafico" class="d-none"></div>
-            </div>
-        </div>
-
-        <!-- DERECHA: teoría -->
-        <div class="col-lg-4">
-            <div class="theory-panel">
-                <h3 class="mb-3">📘 Teoría</h3>
-
-                <h5>Producto Escalar (A·B)</h5>
-                <p>Definición:</p>
-                <pre class="formula">A·B = Ax·Bx + Ay·By + Az·Bz</pre>
-                <p>Interpretación:</p>
-                <ul>
-                    <li>Si A·B &gt; 0 → ángulo agudo entre A y B.</li>
-                    <li>Si A·B = 0 → vectores perpendiculares.</li>
-                    <li>Si A·B &lt; 0 → ángulo obtuso.</li>
-                </ul>
-
-                <hr>
-
-                <h5>Producto Vectorial (A×B)</h5>
-                <p>Definición (componentes):</p>
-                <pre class="formula">A×B = (AyBz − AzBy, AzBx − AxBz, AxBy − AyBx)</pre>
-                <p>Propiedades:</p>
-                <ul>
-                    <li>Es perpendicular a A y B.</li>
-                    <li>Magnitud = área del paralelogramo generado por A y B.</li>
-                    <li>A×B = −(B×A).</li>
-                </ul>
-
-                <hr>
-
-                <h5>Notas de visualización</h5>
-                <ul>
-                    <li>Rojo → Vector A</li>
-                    <li>Verde → Vector B</li>
-                    <li>Azul → Producto vectorial (A×B)</li>
-                    <li>Los cubos extrapolares muestran las proyecciones/componentes</li>
-                </ul>
+                <div id="grafico" class="d-none bg-dark-blur"></div>
 
             </div>
         </div>
+
+        <!-- COLUMNA DERECHA: TEORÍA -->
+        <div class="col-lg-4 col-md-12">
+            <div class="explanation">
+
+                <h4>Teoría de Multiplicación en R³</h4>
+
+                <p>Para dos vectores en \( \mathbb{R}^3 \):</p>
+                <div class="math-block">
+                    $$ \vec{A} = (A_x, A_y, A_z) \quad \vec{B} = (B_x, B_y, B_z) $$
+                </div>
+
+                <p><strong>Producto Escalar:</strong></p>
+                <div class="math-block">
+                    $$ \vec{A} \cdot \vec{B} = A_x B_x + A_y B_y + A_z B_z $$
+                </div>
+                <div class="math-block">
+                    $$ \vec{A} \cdot \vec{B} = |\vec{A}||\vec{B}|\cos(\theta) $$
+                </div>
+
+                <p>Si \( \vec{A} \cdot \vec{B} > 0 \) → ángulo agudo. Si \( = 0 \) → perpendiculares. Si \( < 0 \) → ángulo obtuso.</p>
+
+                <p><strong>Producto Vectorial:</strong></p>
+                <div class="math-block">
+                    $$ \vec{A} \times \vec{B} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ A_x & A_y & A_z \\ B_x & B_y & B_z \end{vmatrix} $$
+                </div>
+                <div class="math-block">
+                    $$ = (A_y B_z - A_z B_y,\; A_z B_x - A_x B_z,\; A_x B_y - A_y B_x) $$
+                </div>
+
+                <p>Su magnitud equivale al área del paralelogramo formado por \( \vec{A} \) y \( \vec{B} \):</p>
+                <div class="math-block">
+                    $$ |\vec{A} \times \vec{B}| = |\vec{A}||\vec{B}|\sin(\theta) $$
+                </div>
+
+                <p>Además: \( \vec{A} \times \vec{B} = -(\vec{B} \times \vec{A}) \)</p>
+
+                <hr style="border-color: #444;">
+
+                <p><strong>Leyenda de colores:</strong></p>
+                <p><span style="color:#ff5555;">■</span> Rojo → Vector A</p>
+                <p><span style="color:#4CAF50;">■</span> Verde → Vector B</p>
+                <p><span style="color:#5599ff;">■</span> Azul → Producto vectorial (A×B)</p>
+                <p>Los cubos punteados muestran las proyecciones y componentes de cada vector.</p>
+
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- === Script ORIGINAL (no modificado) === -->
 <script>
-    // Dibuja las 12 aristas del cubo desde (0,0,0) hasta (x,y,z)
     function cuboExtrapolar(x, y, z, color='#fff', width=2) {
         let v = [
             [0,0,0], [x,0,0], [x,y,0], [0,y,0],
@@ -205,7 +252,7 @@
                 x: [v[e[0]][0], v[e[1]][0]],
                 y: [v[e[0]][1], v[e[1]][1]],
                 z: [v[e[0]][2], v[e[1]][2]],
-                line: {color: color, width: width, dash: 'dot'},
+                line: { color: color, width: width, dash: 'dot' },
                 showlegend: false
             });
         }
@@ -215,6 +262,7 @@
     function productoEscalar(x1, y1, z1, x2, y2, z2) {
         return x1 * x2 + y1 * y2 + z1 * z2;
     }
+
     function productoVectorial(x1, y1, z1, x2, y2, z2) {
         return [
             y1 * z2 - z1 * y2,
@@ -224,51 +272,40 @@
     }
 
     function graficarMultiplicacion(x1, y1, z1, x2, y2, z2, escalar, vectorial) {
-        const colorCubo = '#fff';
-
         let data = [
-            // Vector A (rojo)
             {
-                type: 'scatter3d',
-                mode: 'lines',
+                type: 'scatter3d', mode: 'lines',
                 x: [0, x1], y: [0, y1], z: [0, z1],
                 line: { color: 'red', width: 6 },
                 name: `A (${x1.toFixed(2)}, ${y1.toFixed(2)}, ${z1.toFixed(2)})`
             },
-            // Vector B (verde)
             {
-                type: 'scatter3d',
-                mode: 'lines',
+                type: 'scatter3d', mode: 'lines',
                 x: [0, x2], y: [0, y2], z: [0, z2],
                 line: { color: 'green', width: 6 },
                 name: `B (${x2.toFixed(2)}, ${y2.toFixed(2)}, ${z2.toFixed(2)})`
             },
-            // Producto vectorial (azul)
             {
-                type: 'scatter3d',
-                mode: 'lines',
+                type: 'scatter3d', mode: 'lines',
                 x: [0, vectorial[0]], y: [0, vectorial[1]], z: [0, vectorial[2]],
                 line: { color: 'blue', width: 6 },
                 name: `A×B (${vectorial[0].toFixed(2)}, ${vectorial[1].toFixed(2)}, ${vectorial[2].toFixed(2)})`
             }
         ];
 
-        // Añadir cubos extrapolares para cada vector
         data = data
-            .concat(cuboExtrapolar(x1, y1, z1, colorCubo, 2))
-            .concat(cuboExtrapolar(x2, y2, z2, colorCubo, 2))
-            .concat(cuboExtrapolar(vectorial[0], vectorial[1], vectorial[2], colorCubo, 2));
+            .concat(cuboExtrapolar(x1, y1, z1, '#fff', 2))
+            .concat(cuboExtrapolar(x2, y2, z2, '#fff', 2))
+            .concat(cuboExtrapolar(vectorial[0], vectorial[1], vectorial[2], '#fff', 2));
 
-        const valores = [
-            x1, y1, z1, x2, y2, z2, vectorial[0], vectorial[1], vectorial[2]
-        ];
+        const valores = [x1, y1, z1, x2, y2, z2, vectorial[0], vectorial[1], vectorial[2]];
         const min = Math.min(0, ...valores) - 1;
         const max = Math.max(0, ...valores) + 1;
 
         const layout = {
             margin: { l: 0, r: 0, b: 0, t: 30 },
-            paper_bgcolor: '#212529',
-            plot_bgcolor: '#212529',
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
             font: { color: '#f8f9fa' },
             scene: {
                 xaxis: { title: 'X', color: '#fff', range: [min, max] },
@@ -279,15 +316,13 @@
             },
             legend: { x: 0.85, y: 0.95, font: { color: '#f8f9fa' } },
             title: {
-                text: `Producto Escalar: ${escalar.toFixed(2)} | Producto Vectorial: (${vectorial[0].toFixed(2)}, ${vectorial[1].toFixed(2)}, ${vectorial[2].toFixed(2)})`,
-                x: 0.5,
-                y: 0.95,
-                xanchor: 'center',
-                font: { size: 14 }
+                text: `Escalar: ${escalar.toFixed(2)} | Vectorial: (${vectorial[0].toFixed(2)}, ${vectorial[1].toFixed(2)}, ${vectorial[2].toFixed(2)})`,
+                x: 0.5, xanchor: 'center',
+                font: { size: 13, color: '#fff' }
             }
         };
 
-        Plotly.newPlot('grafico', data, layout, { displayModeBar: false });
+        Plotly.newPlot('grafico', data, layout, { displayModeBar: false, responsive: true });
     }
 
     document.getElementById('vectorForm').addEventListener('submit', function(e) {
@@ -299,10 +334,9 @@
         const y2 = parseFloat(this.y2.value);
         const z2 = parseFloat(this.z2.value);
 
-        const escalar = productoEscalar(x1, y1, z1, x2, y2, z2);
+        const escalar  = productoEscalar(x1, y1, z1, x2, y2, z2);
         const vectorial = productoVectorial(x1, y1, z1, x2, y2, z2);
 
-        // Mostrar resultados
         const resultados = document.getElementById('resultados');
         resultados.innerHTML = `
             <strong>Producto Escalar (A·B):</strong> ${escalar.toFixed(2)}<br>
@@ -310,9 +344,11 @@
         `;
         resultados.classList.remove('d-none');
 
-        document.getElementById('grafico').classList.remove('d-none');
+        const grafico = document.getElementById('grafico');
+        grafico.classList.remove('d-none');
         graficarMultiplicacion(x1, y1, z1, x2, y2, z2, escalar, vectorial);
     });
 </script>
+
 </body>
 </html>
