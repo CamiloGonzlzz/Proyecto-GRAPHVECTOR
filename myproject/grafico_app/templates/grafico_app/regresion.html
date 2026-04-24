@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regresión Lineal</titltle>
-    //cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+    <title>Regresión Lineal</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
         :root {
             --color-accent: #17a2b8;
@@ -151,11 +154,11 @@
                 <form method="post" class="mb-4">
                     {% csrf_token %}
                     <div class="form-group">
-                        abel for="x">Valores de X (separados por comas):</label>
+                        <label for="x">Valores de X (separados por comas):</label>
                         <input type="text" name="x" id="x" class="form-control" placeholder="Ejemplo: 1, 2, 3, 4" required>
                     </div>
                     <div class="form-group">
-                        abel for="y">Valores de Y (separados por comas):</label>
+                        <label for="y">Valores de Y (separados por comas):</label>
                         <input type="text" name="y" id="y" class="form-control" placeholder="Ejemplo: 2, 3, 5, 7" required>
                     </div>
                     <div class="text-center mt-3">
@@ -197,26 +200,26 @@
                 </div>
 
                 <h4>🔹 ¿Qué significan sus parámetros?</h4>
-                <u
+                </ul>
                 <ul>
-                    ><strong>Pendiente (a):</strong> indica cuánto cambia Y por cada unidad que aumenta X.</l/li>
-                    ><strong>Intercepto (b):</strong> es el valor de Y cuando X = 0.</li>
+                    <li><strong>Pendiente (a):</strong> indica cuánto cambia Y por cada unidad que aumenta X.</li>
+                    <li><strong>Intercepto (b):</strong> es el valor de Y cuando X = 0.</li>
                 </ul>
 
                 <h4>🔹 Paso para calcular la recta</h4>
-                <u
+                </ul>
                 <ul>
-                    >Calcular medias de X y Y.</l/li>
-                    >Obtener la pendiente: Σ(x - x̄)(y - ȳ) / Σ(x - x̄)²</l/li>
-                    >Calcular intercepto: ȳ - a·x̄</li>
+                    <li>Calcular medias de X y Y.</li>
+                    <li>Obtener la pendiente: Σ(x - x̄)(y - ȳ) / Σ(x - x̄)²</li>
+                    <li>Calcular intercepto: ȳ - a·x̄</li>
                 </ul>
 
                 <h4>🔹 Hipótesis</h4>
                 <p>Evaluamos si existe una relación lineal significativa entre X y Y usando la pendiente:</p>
-                <u
+                </ul>
                 <ul>
-                    ><strong>H₀:</strong> a = 0 (no hay relación)</l/li>
-                    ><strong>H₁:</strong> a ≠ 0 (sí hay relación)</li>
+                    <li><strong>H₀:</strong> a = 0 (no hay relación)</li>
+                    <li><strong>H₁:</strong> a ≠ 0 (sí hay relación)</li>
                 </ul>
 
                 <p>Si la pendiente es suficientemente grande en valor absoluto, rechazamos H₀.</p>
