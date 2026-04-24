@@ -119,7 +119,9 @@ def Prueba_FacilR2(request):
         # Graficar ambos vectores
         fig, ax = plt.subplots()
         ax.quiver(0, 0, x_real, y_real, angles='xy', scale_units='xy', scale=1, color='r', label='Correcto')
-        ax.quiver(0, 0, x_val, y_val, angles='xy', scale_units='xy', scale=1, color='b', linestyle='--', label='Tu respuesta')
+        ax.quiver(0, 0, x_val, y_val,
+          angles='xy', scale_units='xy', scale=1,
+          color='b', alpha=0.6, label='Tu respuesta')
         ax.set_xlim(-10, 10)
         ax.set_ylim(-10, 10)
         ax.grid()
