@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resta de Vectores R3</titltle>
+    <title>Resta de Vectores R3</title>
 
-    //cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheetet">
-    //cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <style>
@@ -143,12 +143,14 @@
             border-radius: 10px;
             padding: 0.7rem 1.5rem;
             font-weight: 600;
+            color: #fff;
         }
 
         .btn-primary:hover,
         .btn-primary:focus {
             background-color: #138496;
             border-color: #138496;
+            color: #fff;
         }
 
         .input-group-icon {
@@ -186,12 +188,9 @@
 </head>
 
 <body>
-
 <div class="layout">
 
-
     <div class="contenido shadow-lg">
-
         <h1 class="text-center text-white mb-3">Resta de Vectores en R³</h1>
 
         <div class="info-box">
@@ -208,14 +207,14 @@
             <!-- X -->
             <div class="row align-items-center mb-2 gx-1 justify-content-center">
                 <div class="col-5 d-flex flex-column align-items-center">
-                    abel for="x1" class="form-label">X<sub>A</sub></label>
+                    <label for="x1" class="form-label">X<sub>A</sub></label>
                     <input type="number" step="0.1" id="x1" class="form-control text-center" required>
                 </div>
                 <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
-                    <span class="input-group-icon"><i class="bi bi-dash"></i></span>
+                    <span class="input-group-icon"><i class="fa-solid fa-minus"></i></span>
                 </div>
                 <div class="col-5 d-flex flex-column align-items-center">
-                    abel for="x2" class="form-label">X<sub>B</sub></label>
+                    <label for="x2" class="form-label">X<sub>B</sub></label>
                     <input type="number" step="0.1" id="x2" class="form-control text-center" required>
                 </div>
             </div>
@@ -223,14 +222,14 @@
             <!-- Y -->
             <div class="row align-items-center mb-2 gx-1 justify-content-center">
                 <div class="col-5 d-flex flex-column align-items-center">
-                    abel for="y1" class="form-label">Y<sub>A</sub></label>
+                    <label for="y1" class="form-label">Y<sub>A</sub></label>
                     <input type="number" step="0.1" id="y1" class="form-control text-center" required>
                 </div>
                 <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
-                    <span class="input-group-icon"><i class="bi bi-dash"></i></span>
+                    <span class="input-group-icon"><i class="fa-solid fa-minus"></i></span>
                 </div>
                 <div class="col-5 d-flex flex-column align-items-center">
-                    abel for="y2" class="form-label">Y<sub>B</sub></label>
+                    <label for="y2" class="form-label">Y<sub>B</sub></label>
                     <input type="number" step="0.1" id="y2" class="form-control text-center" required>
                 </div>
             </div>
@@ -238,14 +237,14 @@
             <!-- Z -->
             <div class="row align-items-center mb-4 gx-1 justify-content-center">
                 <div class="col-5 d-flex flex-column align-items-center">
-                    abel for="z1" class="form-label">Z<sub>A</sub></label>
+                    <label for="z1" class="form-label">Z<sub>A</sub></label>
                     <input type="number" step="0.1" id="z1" class="form-control text-center" required>
                 </div>
                 <div class="col-2 text-center d-flex align-items-end justify-content-center" style="height: 56px;">
-                    <span class="input-group-icon"><i class="bi bi-dash"></i></span>
+                    <span class="input-group-icon"><i class="fa-solid fa-minus"></i></span>
                 </div>
                 <div class="col-5 d-flex flex-column align-items-center">
-                    abel for="z2" class="form-label">Z<sub>B</sub></label>
+                    <label for="z2" class="form-label">Z<sub>B</sub></label>
                     <input type="number" step="0.1" id="z2" class="form-control text-center" required>
                 </div>
             </div>
@@ -258,7 +257,6 @@
         <div id="grafico" class="d-none"></div>
     </div>
 
-    <!-- COLUMNA DERECHA (TEORÍA) -->
     <div class="teoria">
         <h3>Teoría</h3>
 
@@ -271,9 +269,9 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
         <p>Geométricamente, la resta puede interpretarse como:</p>
 
         <ul>
-            >Sumar A con el inverso de B.</l/li>
-            >Construir un paralepípedo usando ambos vectores.</l/li>
-            >Usar la ley del triángulo invertido.</li>
+            <li>Sumar A con el inverso de B.</li>
+            <li>Construir un paralelepípedo usando ambos vectores.</li>
+            <li>Usar la ley del triángulo invertido.</li>
         </ul>
 
         <p>El resultado indica hacia dónde apunta el vector que va desde el final de B hasta el final de A.</p>
@@ -281,10 +279,10 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
         <p>Esta gráfica muestra:</p>
 
         <ul>
-            ><span style="color:red;">Vector A</span></l/li>
-            ><span style="color:lime;">Vector B</span></l/li>
-            ><span style="color:deepskyblue;">Vector A − B</span></l/li>
-            >Cubos extrapolares para cada vector</li>
+            <li><span style="color:red;">Vector A</span></li>
+            <li><span style="color:lime;">Vector B</span></li>
+            <li><span style="color:deepskyblue;">Vector A − B</span></li>
+            <li>Cubos extrapolares para cada vector</li>
         </ul>
     </div>
 
@@ -292,19 +290,19 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
-
 <script>
-
-    function cuboExtrapolar(x, y, z, color='#fff', width=2) {
+    function cuboExtrapolar(x, y, z, color = '#fff', width = 2) {
         let v = [
             [0,0,0], [x,0,0], [x,y,0], [0,y,0],
             [0,0,z], [x,0,z], [x,y,z], [0,y,z]
         ];
+
         let edges = [
             [0,1],[1,2],[2,3],[3,0],
             [4,5],[5,6],[6,7],[7,4],
             [0,4],[1,5],[2,6],[3,7]
         ];
+
         let traces = [];
         for (let e of edges) {
             traces.push({
@@ -313,7 +311,7 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
                 x: [v[e[0]][0], v[e[1]][0]],
                 y: [v[e[0]][1], v[e[1]][1]],
                 z: [v[e[0]][2], v[e[1]][2]],
-                line: {color: color, width: width, dash: 'dot'},
+                line: { color: color, width: width, dash: 'dot' },
                 showlegend: false
             });
         }
@@ -325,9 +323,27 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
         const colorCubo = '#fff';
 
         let data = [
-            { type: 'scatter3d', mode: 'lines', x: [0, x1], y: [0, y1], z: [0, z1], line: { color: 'red', width: 6 }, name: `A (${x1}, ${y1}, ${z1})` },
-            { type: 'scatter3d', mode: 'lines', x: [0, x2], y: [0, y2], z: [0, z2], line: { color: 'green', width: 6 }, name: `B (${x2}, ${y2}, ${z2})` },
-            { type: 'scatter3d', mode: 'lines', x: [0, xs], y: [0, ys], z: [0, zs], line: { color: 'blue', width: 6 }, name: `A−B (${xs}, ${ys}, ${zs})` }
+            {
+                type: 'scatter3d',
+                mode: 'lines',
+                x: [0, x1], y: [0, y1], z: [0, z1],
+                line: { color: 'red', width: 6 },
+                name: `A (${x1}, ${y1}, ${z1})`
+            },
+            {
+                type: 'scatter3d',
+                mode: 'lines',
+                x: [0, x2], y: [0, y2], z: [0, z2],
+                line: { color: 'green', width: 6 },
+                name: `B (${x2}, ${y2}, ${z2})`
+            },
+            {
+                type: 'scatter3d',
+                mode: 'lines',
+                x: [0, xs], y: [0, ys], z: [0, zs],
+                line: { color: 'blue', width: 6 },
+                name: `A−B (${xs}, ${ys}, ${zs})`
+            }
         ];
 
         data = data
@@ -359,18 +375,20 @@ A − B = (Ax − Bx , Ay − By , Az − Bz)
 
     document.getElementById('vectorForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const x1 = parseFloat(this.x1.value);
-        const y1 = parseFloat(this.y1.value);
-        const z1 = parseFloat(this.z1.value);
-        const x2 = parseFloat(this.x2.value);
-        const y2 = parseFloat(this.y2.value);
-        const z2 = parseFloat(this.z2.value);
 
-        document.getElementById('grafico').classList.remove('d-none');
-        document.getElementById('grafico').style.display = 'block';
+        const x1 = parseFloat(document.getElementById('x1').value);
+        const y1 = parseFloat(document.getElementById('y1').value);
+        const z1 = parseFloat(document.getElementById('z1').value);
+        const x2 = parseFloat(document.getElementById('x2').value);
+        const y2 = parseFloat(document.getElementById('y2').value);
+        const z2 = parseFloat(document.getElementById('z2').value);
+
+        const grafico = document.getElementById('grafico');
+        grafico.classList.remove('d-none');
+        grafico.style.display = 'block';
+
         graficarVectores(x1, y1, z1, x2, y2, z2);
     });
 </script>
-
 </body>
 </html>

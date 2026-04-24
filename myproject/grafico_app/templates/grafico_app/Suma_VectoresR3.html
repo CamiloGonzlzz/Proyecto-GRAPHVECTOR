@@ -6,9 +6,9 @@
     <title>Suma de Vectores R3</title>
 
     <!-- Bootstrap 5 -->
-    //cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Iconos Bootstrap -->
-    //cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -114,6 +114,7 @@
 <div class="container py-4">
     <div class="row g-4">
 
+        <!-- COLUMNA IZQUIERDA (Formulario + gráfico) -->
         <div class="col-lg-8 col-md-12">
             <div class="bg-dark-blur p-4">
 
@@ -133,14 +134,14 @@
                     <!-- X -->
                     <div class="row mb-2 justify-content-center align-items-center">
                         <div class="col-5 text-center mb-2 mb-sm-0">
-                            abel class="form-label">X<sub>A</sub></label>
+                            <label for="x1" class="form-label">X<sub>A</sub></label>
                             <input type="number" step="0.1" id="x1" class="form-control text-center" required>
                         </div>
                         <div class="col-2 text-center mb-2 mb-sm-0">
                             <i class="bi bi-plus fs-2 text-info"></i>
                         </div>
                         <div class="col-5 text-center mb-2 mb-sm-0">
-                            abel class="form-label">X<sub>B</sub></label>
+                            <label for="x2" class="form-label">X<sub>B</sub></label>
                             <input type="number" step="0.1" id="x2" class="form-control text-center" required>
                         </div>
                     </div>
@@ -148,14 +149,14 @@
                     <!-- Y -->
                     <div class="row mb-2 justify-content-center align-items-center">
                         <div class="col-5 text-center mb-2 mb-sm-0">
-                            abel class="form-label">Y<sub>A</sub></label>
+                            <label for="y1" class="form-label">Y<sub>A</sub></label>
                             <input type="number" step="0.1" id="y1" class="form-control text-center" required>
                         </div>
                         <div class="col-2 text-center mb-2 mb-sm-0">
                             <i class="bi bi-plus fs-2 text-info"></i>
                         </div>
                         <div class="col-5 text-center mb-2 mb-sm-0">
-                            abel class="form-label">Y<sub>B</sub></label>
+                            <label for="y2" class="form-label">Y<sub>B</sub></label>
                             <input type="number" step="0.1" id="y2" class="form-control text-center" required>
                         </div>
                     </div>
@@ -163,14 +164,14 @@
                     <!-- Z -->
                     <div class="row mb-4 justify-content-center align-items-center">
                         <div class="col-5 text-center mb-2 mb-sm-0">
-                            abel class="form-label">Z<sub>A</sub></label>
+                            <label for="z1" class="form-label">Z<sub>A</sub></label>
                             <input type="number" step="0.1" id="z1" class="form-control text-center" required>
                         </div>
                         <div class="col-2 text-center mb-2 mb-sm-0">
                             <i class="bi bi-plus fs-2 text-info"></i>
                         </div>
                         <div class="col-5 text-center mb-2 mb-sm-0">
-                            abel class="form-label">Z<sub>B</sub></label>
+                            <label for="z2" class="form-label">Z<sub>B</sub></label>
                             <input type="number" step="0.1" id="z2" class="form-control text-center" required>
                         </div>
                     </div>
@@ -184,6 +185,7 @@
             </div>
         </div>
 
+        <!-- COLUMNA DERECHA (TEORÍA) -->
         <div class="col-lg-4 col-md-12">
             <div class="teoria-panel">
                 <h4 class="mb-3">📘 Teoría: Suma de vectores en R³</h4>
@@ -209,12 +211,10 @@
                     paralelogramo o “cabeza con cola”.
                 </p>
 
-                <u
-
                 <ul>
-                    >El vector A se dibuja desde el origen.</l/li>
-                    >El vector B también se dibuja desde el origen.</l/li>
-                    >El vector suma A+B es la diagonal del paralelogramo formado.</li>
+                    <li>El vector A se dibuja desde el origen.</li>
+                    <li>El vector B también se dibuja desde el origen.</li>
+                    <li>El vector suma A+B es la diagonal del paralelogramo formado.</li>
                 </ul>
 
                 <p>Esta visualización es muy útil en física para fuerzas, desplazamientos y campos.</p>

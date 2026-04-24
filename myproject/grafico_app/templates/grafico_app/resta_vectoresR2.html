@@ -5,20 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resta de Vectores R2</title>
 
-
-    //cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
-
-    //cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
         :root {
             --color-accent: #17a2b8;
-            --color-panel: rgba(0, 0, 0, 0.466);
-            --color-text: #fff;
-            --color-muted: #bbb;
             --color-input: #444;
             --color-border: #ccc;
-            --color-shadow: rgba(255, 255, 255, 0.685);
         }
 
         body {
@@ -50,7 +44,6 @@
         }
 
         h1 {
-            text-shadow: none;
             margin-bottom: 1.5rem;
         }
 
@@ -147,7 +140,7 @@
 
                     <div class="form-row mb-3">
                         <div class="form-group col-5">
-                            abel for="x1">X1 (A):</label>
+                            <label for="x1">X1 (A):</label>
                             <input type="number" class="form-control" id="x1" name="x1" required>
                         </div>
 
@@ -156,14 +149,14 @@
                         </div>
 
                         <div class="form-group col-5">
-                            abel for="x2">X2 (B):</label>
+                            <label for="x2">X2 (B):</label>
                             <input type="number" class="form-control" id="x2" name="x2" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-5">
-                            abel for="y1">Y1 (A):</label>
+                            <label for="y1">Y1 (A):</label>
                             <input type="number" class="form-control" id="y1" name="y1" required>
                         </div>
 
@@ -172,7 +165,7 @@
                         </div>
 
                         <div class="form-group col-5">
-                            abel for="y2">Y2 (B):</label>
+                            <label for="y2">Y2 (B):</label>
                             <input type="number" class="form-control" id="y2" name="y2" required>
                         </div>
                     </div>
@@ -190,6 +183,7 @@
             </div>
         </div>
 
+   
         <div class="col-md-5">
             <div class="teoria-box">
                 <h2><i class="fas fa-book"></i> Teoría de la Resta de Vectores</h2>
@@ -197,18 +191,16 @@
                 <p>La resta de vectores en <strong>R²</strong> se define como:</p>
 
                 <div class="formula-box text-center">
-                    <strong>A − B = (Ax − Bx , Ay − By)</strong>
+                    <strong>A − B = (Ax − Bx, Ay − By)</strong>
                 </div>
 
                 <p>Interpretación geométrica:</p>
 
-                <u
-
                 <ul>
-                    ><strong>Restar un vector equivale a sumar el opuesto del otro.</strong></l/li>
-                    >A − B = A + (−B)</l/li>
-                    >El vector <strong>−B</strong> apunta en la dirección contraria a B.</l/li>
-                    >El resultado es el vector que va desde la punta de B hasta la punta de A.</li>
+                    <li><strong>Restar un vector equivale a sumar el opuesto del otro.</strong></li>
+                    <li>A − B = A + (−B).</li>
+                    <li>El vector <strong>−B</strong> apunta en la dirección contraria a B.</li>
+                    <li>El resultado es el vector que va desde la punta de B hasta la punta de A.</li>
                 </ul>
 
                 <p>
@@ -219,6 +211,5 @@
 
     </div>
 </div>
-
 </body>
 </html>
