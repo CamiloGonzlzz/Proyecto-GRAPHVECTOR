@@ -12,12 +12,93 @@ import math
 from django.urls import reverse
 #import plotly.graph_objects as go
 import requests
+from django.contrib import messages
 
 
 def login_view(request):
+
+    if request.method == "POST":
+
+        correo = request.POST.get("correo")
+        clave = request.POST.get("clave")
+
+        url = "http://localhost:5278/api/Login/Login"
+
+        payload = {
+            "Correo": correo,
+            "Clave": clave
+        }
+
+        try:
+
+            response = requests.post(url, json=payload)
+
+            data = response.json()
+
+            if data["isSuccess"]:
+
+                # guardar token
+                request.session["token"] = data["token"]
+
+                return redirect("inicio")
+
+            else:
+
+                messages.error(request, "Credenciales incorrectas")
+
+        except Exception as e:
+
+            messages.error(request, str(e))
+
     return render(request, "grafico_app/login.html")
 
 def registro_view(request):
+
+    if request.method == "POST":
+
+        nombre = request.POST.get("nombre")
+        apellidos = request.POST.get("apellidos")
+        correo = request.POST.get("correo")
+        institucion = request.POST.get("institucion")
+        clave = request.POST.get("clave")
+        confirmar = request.POST.get("confirmar")
+
+        if clave != confirmar:
+
+            messages.error(request, "Las contraseñas no coinciden")
+
+            return render(request, "grafico_app/registro.html")
+
+        url = "http://localhost:5278/api/Login/Registrarse"
+
+        payload = {
+            "Nombre": nombre,
+            "Apellidos": apellidos,
+            "Correo": correo,
+            "Institucion": institucion,
+            "Clave": clave
+        }
+
+        try:
+
+            response = requests.post(url, json=payload)
+
+            data = response.json()
+
+            if data["isSuccess"]:
+
+                messages.success(request, "Usuario registrado correctamente")
+
+                return redirect("login")
+
+            else:
+
+                messages.error(request, "No se pudo registrar el usuario")
+
+        except Exception as e:
+
+            messages.error(request, str(e))
+
     return render(request, "grafico_app/registro.html")
 
 def inicio(request):
