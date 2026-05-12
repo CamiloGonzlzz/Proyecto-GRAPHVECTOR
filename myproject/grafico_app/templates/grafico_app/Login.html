@@ -79,8 +79,13 @@
                     <button type="submit" class="btn btn-primary">Entrar</button>
                 </div>
                 <div class="mt-3 text-center">
-                    <a href="#" class="link-light" style="text-decoration: none;">
-                        ¿Olvidaste tu contraseña?
+                    <span class="text-light">¿No tienes cuenta?</span>
+                    <a 
+                        href="/grafico/registro/" 
+                        class="link-info fw-bold ms-1" 
+                        style="text-decoration: none;"
+                    >
+                        Registrarse
                     </a>
                 </div>
             </form>
@@ -121,7 +126,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         
         if (data.isSuccess) {
             localStorage.setItem('authToken', data.token);
-            window.location.href = '/dashboard/';
+            window.location.href = '/grafico/';
         } else {
             alert('Correo o contraseña incorrectos');
         }
